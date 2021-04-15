@@ -36,13 +36,13 @@ namespace PL.Controllers
         [HttpPost("Topic/{_id}")]
         public string GetTopic([FromRoute] Guid _id)
         {
-            return workWithTopic.GetTopic(_id);
+            return workWithTopic.GetTopic(_id).Result;
         }
 
         [HttpPost("Topic")]
         public string GetTopics()
         {
-            return workWithTopic.GetAllTopics();
+            return workWithTopic.GetAllTopics().Result;
         }
     }
 }

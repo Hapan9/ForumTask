@@ -7,3 +7,12 @@ C:\Users\Hapan9\source\repos\ForumApp\DAL\obj\Debug\netcoreapp3.1\DAL.AssemblyIn
 C:\Users\Hapan9\source\repos\ForumApp\DAL\obj\Debug\netcoreapp3.1\DAL.csproj.CoreCompileInputs.cache
 C:\Users\Hapan9\source\repos\ForumApp\DAL\obj\Debug\netcoreapp3.1\DAL.dll
 C:\Users\Hapan9\source\repos\ForumApp\DAL\obj\Debug\netcoreapp3.1\DAL.pdb
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\bin\Debug\netcoreapp3.1\DAL.deps.json
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\bin\Debug\netcoreapp3.1\DAL.dll
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\bin\Debug\netcoreapp3.1\DAL.pdb
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\obj\Debug\netcoreapp3.1\DAL.csprojAssemblyReference.cache
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\obj\Debug\netcoreapp3.1\DAL.AssemblyInfoInputs.cache
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\obj\Debug\netcoreapp3.1\DAL.AssemblyInfo.cs
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\obj\Debug\netcoreapp3.1\DAL.csproj.CoreCompileInputs.cache
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\obj\Debug\netcoreapp3.1\DAL.dll
+C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\DAL\obj\Debug\netcoreapp3.1\DAL.pdb

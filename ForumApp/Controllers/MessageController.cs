@@ -25,13 +25,13 @@ namespace PL.Controllers
         [HttpPost("Message")]
         public string GetMessages()
         {
-            return workWithMessage.GetMessages();
+            return workWithMessage.GetMessages().Result;
         }
 
         [HttpPost("Message/{_id}")]
         public string GetMessage([FromRoute]Guid _id)
         {
-            return workWithMessage.GetMessage(_id);
+            return workWithMessage.GetMessage(_id).Result;
         }
 
         [HttpDelete("Message/{_id}")]

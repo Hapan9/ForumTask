@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "O/gCG5C+QJx5xfqTH4nNwDrQhn3gUTsp1vqkX93YitIjJf13o/30CZVZnVc8/jNnXt8c36wYydLpZHN5nQH1EQ==",
+  "dgSpecHash": "zArl1MngkXuaOekLvd8VSbSRbxuO20F1JDmnoZyqODOVXzyyFy+WmPqWSpTkODHnqjsiuT49Wx3D5SUckoO5kw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\DAL\\DAL.csproj",
+  "projectFilePath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\DAL\\DAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Hapan9\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
     "C:\\Users\\Hapan9\\.nuget\\packages\\microsoft.data.sqlclient\\2.0.1\\microsoft.data.sqlclient.2.0.1.nupkg.sha512",

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using DAL.Models;
 using DAL;
-
+using System.Threading.Tasks;
 
 namespace BLL
 {
@@ -11,42 +11,42 @@ namespace BLL
     {
         UnitOfWork unitOfWork = new UnitOfWork();
 
-        public void CreateNewTopic(string _name, Guid _userId)
+        public async void CreateNewTopic(string _name, Guid _userId)
         {
             if (unitOfWork.Users.Get(_userId) == null)
                 return;
 
-            unitOfWork.Topics.Create(new Topic() { Name = _name, User_Id = _userId }) ;
+            await Task.Run(() => unitOfWork.Topics.Create(new Topic() { Name = _name, User_Id = _userId }));
 
         }
 
-        public void UpdateTopic(Guid _id, string _name, Guid _userId)
+        public async void UpdateTopic(Guid _id, string _name, Guid _userId)
         {
             if (unitOfWork.Topics.Get(_id) == null || unitOfWork.Users.Get(_userId) == null)
                 return;
 
-            unitOfWork.Topics.Update(new Topic() { Id = _id, Name = _name, User_Id = _userId });
+            await Task.Run(() => unitOfWork.Topics.Update(new Topic() { Id = _id, Name = _name, User_Id = _userId }));
         }
 
-        public void DeleteTopic(Guid _id)
+        public async void DeleteTopic(Guid _id)
         {
             if (unitOfWork.Topics.Get(_id) == null)
                 return;
 
-            unitOfWork.Topics.Delete(_id);
+            await Task.Run(() => unitOfWork.Topics.Delete(_id));
         }
 
-        public string GetTopic(Guid _id)
+        public async Task<string> GetTopic(Guid _id)
         {
             if (unitOfWork.Topics.Get(_id) == null)
                 return null;
 
-            return JsonSerializer.Serialize((Topic)unitOfWork.Topics.Get(_id));
+            return await Task.Run(() => JsonSerializer.Serialize((Topic)unitOfWork.Topics.Get(_id)));
         }
 
-        public string GetAllTopics()
+        public async Task<string> GetAllTopics()
         {
-            return JsonSerializer.Serialize((IEnumerable<Topic>)unitOfWork.Topics.GetAll());
+            return await Task.Run(() => JsonSerializer.Serialize((IEnumerable<Topic>)unitOfWork.Topics.GetAll()));
         }
     }
 }

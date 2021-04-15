@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\ForumApp\\PL.csproj": {}
+    "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\ForumApp\\PL.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\BLL\\BLL.csproj": {
+    "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\BLL\\BLL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\BLL\\BLL.csproj",
+        "projectUniqueName": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\BLL\\BLL.csproj",
         "projectName": "BLL",
-        "projectPath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\BLL\\BLL.csproj",
+        "projectPath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\BLL\\BLL.csproj",
         "packagesPath": "C:\\Users\\Hapan9\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\BLL\\obj\\",
+        "outputPath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\BLL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Hapan9\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -28,8 +28,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\DAL\\DAL.csproj": {
-                "projectPath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\DAL\\DAL.csproj"
+              "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\DAL\\DAL.csproj": {
+                "projectPath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\DAL\\DAL.csproj"
               }
             }
           }
@@ -62,14 +62,14 @@
         }
       }
     },
-    "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\DAL\\DAL.csproj": {
+    "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\DAL\\DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\DAL\\DAL.csproj",
+        "projectUniqueName": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\DAL\\DAL.csproj",
         "projectName": "DAL",
-        "projectPath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\DAL\\DAL.csproj",
+        "projectPath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\DAL\\DAL.csproj",
         "packagesPath": "C:\\Users\\Hapan9\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\DAL\\obj\\",
+        "outputPath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\DAL\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Hapan9\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -126,14 +126,14 @@
         }
       }
     },
-    "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\ForumApp\\PL.csproj": {
+    "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\ForumApp\\PL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\ForumApp\\PL.csproj",
+        "projectUniqueName": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\ForumApp\\PL.csproj",
         "projectName": "PL",
-        "projectPath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\ForumApp\\PL.csproj",
+        "projectPath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\ForumApp\\PL.csproj",
         "packagesPath": "C:\\Users\\Hapan9\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\ForumApp\\obj\\",
+        "outputPath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\ForumApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Hapan9\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -150,8 +150,8 @@
           "netcoreapp3.1": {
             "targetAlias": "netcoreapp3.1",
             "projectReferences": {
-              "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\BLL\\BLL.csproj": {
-                "projectPath": "C:\\Users\\Hapan9\\source\\repos\\ForumApp\\BLL\\BLL.csproj"
+              "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\BLL\\BLL.csproj": {
+                "projectPath": "C:\\Users\\Hapan9\\Source\\Repos\\Hapan9\\ForumTask\\BLL\\BLL.csproj"
               }
             }
           }
