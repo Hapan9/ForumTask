@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PL.Models;
-using BLL;
+using BLL.Interfaces;
+using BLL.DTOs;
 
 namespace PL.Controllers
 {
@@ -14,36 +14,96 @@ namespace PL.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        WorkWithMessage workWithMessage = new WorkWithMessage();
+        IWorkWithMessage _workWithMessage;
 
-        [HttpGet("Message")]
-        public void CreateMessage([FromBody] MessageModel _message)
+        public MessageController(IWorkWithMessage workWithMessage)
         {
-            workWithMessage.CreateMessage(_message.Text, _message.UserId, _message.TopicId);
+            _workWithMessage = workWithMessage;
         }
 
-        [HttpPost("Message")]
-        public string GetMessages()
+        [HttpGet]
+        public async Task<IActionResult> GetMessages()
         {
-            return workWithMessage.GetMessages().Result;
+            try
+            {
+                return new JsonResult(await Task.Run(() => _workWithMessage.GetMessages().Result));
+            }
+            catch (Exception ex)
+            {
+                return Problem();
+            }
         }
 
-        [HttpPost("Message/{_id}")]
-        public string GetMessage([FromRoute]Guid _id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetMessage([FromRoute]Guid id)
         {
-            return workWithMessage.GetMessage(_id).Result;
+            try
+            {
+                return new JsonResult(await _workWithMessage.GetMessage(id));
+            }
+            catch(ArgumentException ex)
+            {
+                return NotFound();
+            }
+            catch(Exception ex)
+            {
+                return Problem();
+            }
         }
 
-        [HttpDelete("Message/{_id}")]
-        public void DeleteMessage([FromRoute] Guid _id)
+        [HttpPost]
+        public async Task<IActionResult> CreateMessage([FromBody] MessageDTO messageDTO)
         {
-            workWithMessage.DeleteMessage(_id);
+            try
+            {
+                await _workWithMessage.CreateMessage(messageDTO);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return Problem();
+            }
         }
 
-        [HttpPatch("Message/{_id}")]
-        public void UpdateMessage([FromRoute] Guid _id, [FromBody] MessageModel _message)
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateMessage([FromRoute] Guid id, [FromBody] MessageDTO messageDTO)
         {
-            workWithMessage.UpdateMessage(_id, _message.Text, _message.UserId, _message.TopicId);
+            try
+            {
+                await _workWithMessage.UpdateMessage(id, messageDTO);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return Problem();
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteMessage([FromRoute] Guid id)
+        {
+
+            try
+            {
+                await _workWithMessage.DeleteMessage(id);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return Problem();
+            }
         }
     }
 }

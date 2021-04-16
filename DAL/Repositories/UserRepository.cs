@@ -1,62 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using DAL.Interfaces;
 using DAL.Models;
 
 namespace DAL.Repositories
 {
-    public class UserRepository : IRepository<IUser>
+    public class UserRepository : IRepository<User>
     {
-        Db _db = new Db();
+        private readonly Db _db;
 
-        public void Create(IUser _item)
+        public UserRepository(Db db)
         {
-            if (_db.Users.Where(u => u.Login == _item.Login).Count() > 0)
-                return;
-            _db.Users.AddAsync((User)_item);
+            _db = db;
+        }
+
+        public async Task Create(User item)
+        {
+            await Task.Run(() =>_db.Users.AddAsync(item));
             _db.SaveChanges();
         }
 
-        public void Delete(Guid _id)
+        public async Task Delete(Guid id)
         {
-            
-
-            IUser user = _db.Users.Where(u => u.Id == _id).FirstOrDefault();
-
-            MessageRepository messageRepository = new MessageRepository();
-            TopicRepository topicRepository = new TopicRepository();
-
-            _db.Messages.RemoveRange(((IEnumerable<Message>)messageRepository.GetAll()).Where(m => m.User_Id == user.Id));
-            _db.SaveChanges();
-            for (int i = 0; i <  topicRepository.GetAll().Where(t => t.User_Id == user.Id).ToList().Count; i++)
+            await Task.Run(() => 
             {
-                topicRepository.Delete(topicRepository.GetAll().Where(t => t.User_Id == user.Id).ToList()[i].Id);
-            }
-            _db.SaveChanges();
+                _db.Messages.RemoveRange(_db.Messages.Where(m => m.UserId == id));
 
-            _db.Users.Remove(_db.Users.Where(u => u.Id == _id).First());
+                foreach (Topic topic in _db.Topics.Where(t => t.UserId == id).ToList())
+                    _db.Messages.RemoveRange(_db.Messages.Where(m => m.TopicId == topic.Id));
+
+                _db.Users.Remove(_db.Users.First(u => u.Id == id));
+            });
             _db.SaveChanges();
         }
 
-        public IUser Get(Guid _id)
+        public User Get(Guid id)
         {
-            if (_db.Users.Where(u => u.Id == _id).Count() == 0)
+            if (_db.Users.Count(u => u.Id == id) == 0)
                 return null;
 
-            return _db.Users.Where(u => u.Id == _id).First();
+            return _db.Users.First(u => u.Id == id);
         }
 
-        public IEnumerable<IUser> GetAll()
+        public IEnumerable<User> GetAll()
         {
             return _db.Users;
         }
 
-        public void Update(IUser _item)
+        public async Task Update(User item)
         {
-            Delete(_item.Id);
-
-            Create(_item);
+            await Task.Run(() =>
+                {
+                    _db.Remove(_db.Users.First(u => u.Id == item.Id));
+                    _db.Add(item);
+                }
+            );
 
             _db.SaveChanges();
         }

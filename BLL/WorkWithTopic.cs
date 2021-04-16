@@ -1,52 +1,80 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json;
+using System.Linq;
 using DAL.Models;
 using DAL;
 using System.Threading.Tasks;
+using BLL.Interfaces;
+using BLL.DTOs;
 
 namespace BLL
 {
-    public class WorkWithTopic
+    public class WorkWithTopic : IWorkWithTopic
     {
-        UnitOfWork unitOfWork = new UnitOfWork();
+        UnitOfWork _unitOfWork;
 
-        public async void CreateNewTopic(string _name, Guid _userId)
+        public WorkWithTopic(Db db)
         {
-            if (unitOfWork.Users.Get(_userId) == null)
-                return;
+            _unitOfWork = new UnitOfWork(db);
+        }
 
-            await Task.Run(() => unitOfWork.Topics.Create(new Topic() { Name = _name, User_Id = _userId }));
+        public async Task CreateNewTopic(TopicDTO topicDTO)
+        {
+            if (_unitOfWork.Users.Get(topicDTO.UserId) == null)
+                throw new ArgumentException();
+
+            var newTopic = new Topic()
+            {
+                Name = topicDTO.Name,
+                UserId = topicDTO.UserId
+            };
+
+            await _unitOfWork.Topics.Create(newTopic);
 
         }
 
-        public async void UpdateTopic(Guid _id, string _name, Guid _userId)
+        public async Task UpdateTopic(Guid id, TopicDTO topicDTO)
         {
-            if (unitOfWork.Topics.Get(_id) == null || unitOfWork.Users.Get(_userId) == null)
-                return;
+            if (_unitOfWork.Topics.Get(id) == null || _unitOfWork.Users.Get(topicDTO.UserId) == null)
+                throw new ArgumentException();
 
-            await Task.Run(() => unitOfWork.Topics.Update(new Topic() { Id = _id, Name = _name, User_Id = _userId }));
+            var UpdatedTopic = new Topic()
+            {
+                Id = id,
+                Name = topicDTO.Name,
+                UserId = topicDTO.UserId
+            };
+
+            await _unitOfWork.Topics.Update(UpdatedTopic);
         }
 
-        public async void DeleteTopic(Guid _id)
+        public async Task DeleteTopic(Guid id)
         {
-            if (unitOfWork.Topics.Get(_id) == null)
-                return;
+            if (_unitOfWork.Topics.Get(id) == null)
+                throw new ArgumentException();
 
-            await Task.Run(() => unitOfWork.Topics.Delete(_id));
+            await _unitOfWork.Topics.Delete(id);
         }
 
-        public async Task<string> GetTopic(Guid _id)
+        public async Task<Topic> GetTopic(Guid id)
         {
-            if (unitOfWork.Topics.Get(_id) == null)
-                return null;
+            if (_unitOfWork.Topics.Get(id) == null)
+                throw new ArgumentException();
 
-            return await Task.Run(() => JsonSerializer.Serialize((Topic)unitOfWork.Topics.Get(_id)));
+            return await Task.Run(() => _unitOfWork.Topics.Get(id));
         }
 
-        public async Task<string> GetAllTopics()
+        public async Task<IEnumerable<Topic>> GetTopics()
         {
-            return await Task.Run(() => JsonSerializer.Serialize((IEnumerable<Topic>)unitOfWork.Topics.GetAll()));
+            return await Task.Run(() => _unitOfWork.Topics.GetAll());
+        }
+
+        public async Task<IEnumerable<Message>> GetMessages(Guid id)
+        {
+            if (_unitOfWork.Topics.Get(id) == null)
+                throw new ArgumentException();
+
+            return await Task.Run(() => _unitOfWork.Messages.GetAll().Where(m => m.TopicId == id).ToList());
         }
     }
 }

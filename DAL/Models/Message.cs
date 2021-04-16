@@ -6,7 +6,7 @@ using DAL.Interfaces;
 
 namespace DAL.Models
 {
-    public class Message:IMessage
+    public class Message
     {
         public Guid Id { get; set; }
 
@@ -16,7 +16,8 @@ namespace DAL.Models
 
         public Topic Topic { get; set; }
 
-        [NotMapped]
-        public Guid User_Id { get; set; }
+        public Guid UserId { get; set; }
+
+        public User User { get; set; }
     }
 }

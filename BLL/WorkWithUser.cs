@@ -6,69 +6,118 @@ using DAL;
 using DAL.Enums;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.Interfaces;
+using BLL.DTOs;
 
 namespace BLL
 {
-    public class WorkWithUser
+    public class WorkWithUser : IWorkWithUser
     {
-        UnitOfWork unitOfWork = new UnitOfWork();
+        UnitOfWork _unitOfWork;
 
-        public async void UserRegustration(string _name, string _surname, string _login, string _password)
+        public WorkWithUser(Db db)
         {
-            if (_login.Length < 4 || _password.Length < 4 || _name.Length < 4)
-                return;
-            else if (_surname != null && _surname.Length < 4)
-                return;
-
-            await Task.Run(() => unitOfWork.Users.Create(new User() { Name = _name, Surname = _surname, Login = _login, Password = Hashing.GetHashString(_password), Role = Roles.User }));
+            _unitOfWork = new UnitOfWork(db);
         }
 
-        public async Task<string> GetUsers()
+        public async Task CreateUser(UserDTO userDTO)
         {
-            return await Task.Run(() => JsonSerializer.Serialize((IEnumerable<User>)unitOfWork.Users.GetAll()));
+            if (userDTO.Login.Length < 4 || userDTO.Password.Length < 4 || userDTO.Name.Length < 4)
+                throw new ArgumentException();
+            else if (userDTO.Surname != null && userDTO.Surname.Length < 4)
+                throw new ArgumentException();
+            else if (_unitOfWork.Users.GetAll().Count(u => u.Login == userDTO.Login) > 0)
+                throw new InvalidCastException();
+
+            var newUser = new User()
+            {
+                Name = userDTO.Name,
+                Surname = userDTO.Surname,
+                Login = userDTO.Login,
+                Password = Hashing.GetHashString(userDTO.Password),
+                Role = userDTO.Role
+            };
+
+            await _unitOfWork.Users.Create(newUser);
         }
 
-        public async Task<string> GetUser(Guid _id)
+        public async Task<IEnumerable<User>> GetUsers()
         {
-            return await Task.Run(() => JsonSerializer.Serialize((User)unitOfWork.Users.Get(_id)));
+            return await Task.Run(() => _unitOfWork.Users.GetAll());
         }
 
-        public async void UpadteUser(Guid _id, string _name, string _surname, string _login, string _password, int _role)
+        public async Task<User> GetUser(Guid id)
         {
-            if (unitOfWork.Users.Get(_id) == null)
-                return;
-            else if (_login.Length < 4 || _password.Length < 4 || _name.Length < 4)
-                return;
-            else if (_surname != null && _surname.Length < 4)
-                return;
+            if(_unitOfWork.Users.Get(id) == null)
+                throw new ArgumentException();
 
-            foreach (var enumtype in Enum.GetValues(typeof(Roles)))
-                if ((int)enumtype == _role)
+            return await Task.Run(() => _unitOfWork.Users.Get(id));
+        }
+
+        public async Task UpadteUser(Guid id, UserDTO userDTO)
+        {
+            if (_unitOfWork.Users.Get(id) == null)
+                throw new ArgumentException();
+            else if (userDTO.Login.Length < 4 || userDTO.Password.Length < 4 || userDTO.Name.Length < 4)
+                throw new ArgumentException();
+            else if (userDTO.Surname != null && userDTO.Surname.Length < 4)
+                throw new ArgumentException();
+            else if (_unitOfWork.Users.GetAll().Count(u => u.Login == userDTO.Login) > 0)
+                throw new InvalidCastException();
+
+            var updatedUser = new User()
+            {
+                Name = userDTO.Name,
+                Surname = userDTO.Surname,
+                Login = userDTO.Login,
+                Password = Hashing.GetHashString(userDTO.Password),
+                Role = userDTO.Role,
+                Id = id
+            };
+
+            await _unitOfWork.Users.Update(updatedUser);
+                    
+        }
+
+        public async Task DeleteUser(Guid id)
+        {
+            if (_unitOfWork.Users.Get(id) == null)
+                throw new ArgumentException();
+
+            await _unitOfWork.Users.Delete(id);
+        }
+
+        public async Task<bool> CheckUserForm(string userLogin, string userPassword)
+        {
+            if(_unitOfWork.Users.GetAll().Count(u => u.Login == userLogin) == 0)
+                throw new ArgumentException();
+
+            return await Task.Run(() => 
                 {
-                    await Task.Run(() => unitOfWork.Users.Update(new User() {Id = _id, Name = _name, Surname = _surname, Login = _login, Password = Hashing.GetHashString(_password), Role = (Roles)enumtype }));
-                    break;
+                    if (_unitOfWork.Users.GetAll().First(u => u.Login == userLogin).Password != Hashing.GetHashString(userPassword))
+                        return false;
+                    else 
+                        return true;
                 }
+            );
         }
 
-        public async void DeleteUser(Guid _id)
+        public async Task<IEnumerable<Topic>> GetTopics(Guid id)
         {
-            if (unitOfWork.Users.Get(_id) == null)
-                return;
+            if (_unitOfWork.Users.Get(id) == null)
+                throw new ArgumentException();
 
-            await Task.Run(() => unitOfWork.Users.Delete(_id));
+            return await Task.Run(() => _unitOfWork.Topics.GetAll().Where(t => t.UserId == id).ToList());
         }
 
-        public async Task<string> CheckUserEnter(string _login, string _password)
+        public async Task<IEnumerable<Message>> GetMessages(Guid id)
         {
-            if (((IEnumerable<User>)unitOfWork.Users.GetAll()).Where(u => u.Login == _login).Count() == 0)
-                return null;
+            if (_unitOfWork.Users.GetAll().Count(u => u.Id == id) != 0)
+                return await Task.Run(() => _unitOfWork.Messages.GetAll().Where(m => m.UserId == id).ToList());
+            else
+                throw new ArgumentException();
 
-            var user = ((IEnumerable<User>)unitOfWork.Users.GetAll()).Where(u => u.Login == _login).First();
 
-            if (user.Password != Hashing.GetHashString(_password))
-                return null;
-
-            return await Task.Run(() => JsonSerializer.Serialize(user));
         }
     }
 }

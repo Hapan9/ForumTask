@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.Text;
 
-namespace PL.Models
+namespace BLL.DTOs
 {
-    public class TopicModel
+    public class MessageDTO
     {
         [Required]
         public string Text { get; set; }
 
         [Required]
-        public Guid AuthorId { get; set; }
+        public Guid TopicId { get; set; }
+
+        [Required]
+        public Guid UserId { get; set; }
     }
 }

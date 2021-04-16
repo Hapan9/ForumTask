@@ -7,24 +7,31 @@ namespace DAL
 {
     public class UnitOfWork
     {
-        private UserRepository _users;
-        private TopicRepository _topics;
-        private MessageRepository _messages;
+        private readonly Db _db;
+        private UserRepository users;
+        private TopicRepository topics;
+        private MessageRepository messages;
+
+
+        public UnitOfWork(Db db)
+        {
+            _db = db;
+        }
 
         public UserRepository Users { get
             {
-                if (_users == null)
-                    _users = new UserRepository();
-                return _users;
+                if (users == null)
+                    users = new UserRepository(_db);
+                return users;
             } 
         }
 
         public TopicRepository Topics {
             get
             {
-                if (_topics == null)
-                    _topics = new TopicRepository();
-                return _topics;
+                if (topics == null)
+                    topics = new TopicRepository(_db);
+                return topics;
             }
         
         }
@@ -33,9 +40,9 @@ namespace DAL
         {
             get
             {
-                if (_messages == null)
-                    _messages = new MessageRepository();
-                return _messages;
+                if (messages == null)
+                    messages = new MessageRepository(_db);
+                return messages;
             }
 
         }

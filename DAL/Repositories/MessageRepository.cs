@@ -1,59 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DAL.Interfaces;
 using DAL.Models;
+using DAL.Interfaces;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class MessageRepository : IRepository<IMessage>
+    public class MessageRepository : IRepository<Message>
     {
+        private readonly Db _db;
 
-        Db _db = new Db();
-
-        public void Create(IMessage _item)
+        public MessageRepository(Db db)
         {
-            _db.Messages.AddAsync((Message)_item);
-            _db.SaveChanges();
+            _db = db;
+        }
 
-            _db.Users.Where(u => u.Id == _item.User_Id).First().Messages = _db.Messages.Where(mes => _db.Users.Where(u => u.Messages.Where(m => m.Id == mes.Id).Count() == 1).Count() == 0).ToList();
+        public async Task Create(Message item)
+        {
+            await Task.Run(() => _db.Messages.AddAsync(item));
             _db.SaveChanges();
         }
 
-        public void Delete(Guid _id)
+        public async Task Delete(Guid id)
         {
-            _db.Messages.Remove(_db.Messages.Where(m => m.Id == _id).First());
+            await Task.Run(() => _db.Messages.Remove(_db.Messages.First(m => m.Id == id)));
             _db.SaveChanges();
         }
 
-        public IMessage Get(Guid _id)
+        public Message Get(Guid id)
         {
-            if (_db.Messages.Where(m => m.Id == _id).Count() == 0)
+            if (_db.Messages.Where(m => m.Id == id).Count() == 0)
                 return null;
 
-            IMessage message = _db.Messages.Where(m => m.Id == _id).First();
-            message.User_Id = _db.Users.Where(u => u.Messages.Where(m => m.Id == message.Id).Count() == 1).First().Id;
-            return message;
+            return _db.Messages.First(m => m.Id == id);
         }
 
-        public IEnumerable<IMessage> GetAll()
+        public IEnumerable<Message> GetAll()
         {
-            List<Message> messages = new List<Message>();
-
-            for(int i =0; i<_db.Messages.ToList().Count; i++)
-            {
-                messages.Add(_db.Messages.ToList()[i]);
-                messages[messages.Count - 1].User_Id = _db.Users.Where(u => u.Messages.Where(m => m.Id == messages[messages.Count - 1].Id).Count() == 1).First().Id;
-            }
-
-            return messages;
+            return _db.Messages;
         }
 
-        public void Update(IMessage _item)
+        public async Task Update(Message item)
         {
-            Delete(_item.Id);
-
-            Create(_item);
+            await Task.Run(() => 
+                {
+                    _db.Messages.Remove(_db.Messages.First(m => m.Id == item.Id));
+                    _db.Messages.Add(item);
+                }
+            );
 
             _db.SaveChanges();
         }

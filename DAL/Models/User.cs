@@ -7,7 +7,7 @@ using DAL.Models;
 
 namespace DAL.Models
 {
-    public class User : IUser {
+    public class User {
 
         public Guid Id { get; set; }
 
@@ -21,8 +21,8 @@ namespace DAL.Models
 
         public Roles Role { get; set; }
 
-        public IEnumerable<Topic> Topics { get; set; }
+        public virtual IEnumerable<Topic> Topics { get; set; }
 
-        public IEnumerable<Message> Messages { get; set; }
+        public virtual IEnumerable<Message> Messages { get; set; }
     }
 }

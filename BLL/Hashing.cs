@@ -7,9 +7,9 @@ namespace BLL
 {
     class Hashing
     {
-        public static Guid GetHashString(string _string)
+        public static Guid GetHashString(string text)
         {
-            byte[] bytes = Encoding.Unicode.GetBytes(_string);
+            byte[] bytes = Encoding.Unicode.GetBytes(text);
 
             MD5CryptoServiceProvider CSP = new MD5CryptoServiceProvider();
 

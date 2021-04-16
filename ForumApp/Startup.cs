@@ -7,9 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using BLL;
+using BLL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace PL
 {
@@ -22,20 +22,36 @@ namespace PL
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
+            services.AddDbContext<DAL.Db>(o => o.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ForumDB;Trusted_Connection=True;"));
+
+            services.AddTransient<IWorkWithUser, WorkWithUser>();
+
+            services.AddTransient<IWorkWithTopic, WorkWithTopic>();
+
+            services.AddTransient<IWorkWithMessage, WorkWithMessage>();
+
+            services.AddSwaggerGen();
+
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+
+            
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "ForumAPI");
+            });
 
             app.UseHttpsRedirection();
 

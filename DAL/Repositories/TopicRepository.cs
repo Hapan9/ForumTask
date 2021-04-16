@@ -4,59 +4,58 @@ using System.Text;
 using DAL.Interfaces;
 using DAL.Models;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
-    public class TopicRepository : IRepository<ITopic>
+    public class TopicRepository : IRepository<Topic>
     {
+        private readonly Db _db;
 
-        Db _db = new Db();
-
-        public void Create(ITopic _item)
+        public TopicRepository(Db db)
         {
-            _db.Topics.AddAsync((Topic)_item);
-            _db.SaveChanges();
+            _db = db;
+        }
 
-            _db.Users.Where(u => u.Id == _item.User_Id).First().Topics = _db.Topics.Where(top => _db.Users.Where(u => u.Topics.Where(t => t.Id == top.Id).Count() == 1).Count() == 0).ToList();
-
+        public async Task Create(Topic item)
+        {
+            await Task.Run(() => _db.Topics.Add(item));
             _db.SaveChanges();
         }
 
-        public void Delete(Guid _id)
+        public async Task Delete(Guid id)
         {
-            _db.Topics.Remove(_db.Topics.Where(t => t.Id == _id).First());
-            _db.Messages.RemoveRange(_db.Messages.Where(m => m.Id == _id));
+            await Task.Run(() =>
+                {
+                    _db.Messages.RemoveRange(_db.Messages.Where(m => m.TopicId == id));
+                    _db.Topics.Remove(_db.Topics.First(t => t.Id == id));
+                }
+            );
             _db.SaveChanges();
         }
 
-        public ITopic Get(Guid _id)
+        public Topic Get(Guid id)
         {
-            if (_db.Topics.Where(t => t.Id == _id).Count() == 0)
+            if (_db.Topics.Where(t => t.Id == id).Count() == 0)
                 return null;
 
-            ITopic topic = _db.Topics.Where(t => t.Id == _id).First();
-            topic.User_Id = _db.Users.Where(u => u.Topics.Where(t => t.Id == topic.Id).Count() == 1).First().Id;
-
-            return topic;
+            return _db.Topics.First(t => t.Id == id);
         }
 
-        public IEnumerable<ITopic> GetAll()
+        public IEnumerable<Topic> GetAll()
         {
-            List<Topic> topics = new List<Topic>();
-            for(int i = 0; i < _db.Topics.ToList().Count; i++)
-            {
-                topics.Add(_db.Topics.ToList()[i]);
-                topics[topics.Count - 1].User_Id = _db.Users.Where(u => u.Topics.Where(t => t.Id == topics[topics.Count - 1].Id).Count() == 1).First().Id;
-            }
-            return topics;
+            return _db.Topics;
         }
 
-        public void Update(ITopic _item)
+        public async Task Update(Topic item)
         {
 
-            Delete(_item.Id);
-
-            Create(_item);
+            await Task.Run(() =>
+                {
+                    _db.Topics.Remove(_db.Topics.First(t => t.Id == item.Id));
+                    _db.Topics.Add(item);
+                }
+            );
 
             _db.SaveChanges();
         }

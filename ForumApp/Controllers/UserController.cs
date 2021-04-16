@@ -11,35 +11,34 @@ namespace PL.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TopicController : ControllerBase
+    public class UserController : ControllerBase
     {
-        IWorkWithTopic _workWithTopic;
+        IWorkWithUser _workWithUser;
 
-        public TopicController(IWorkWithTopic workWithTopic)
+        public UserController(IWorkWithUser workWithUser)
         {
-            _workWithTopic = workWithTopic;
+            _workWithUser = workWithUser;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetTopics()
+        public async Task<IActionResult> GetUsers()
         {
             try
             {
-                return new JsonResult(await _workWithTopic.GetTopics());
+                return new JsonResult(await _workWithUser.GetUsers());
             }
             catch (Exception ex)
             {
                 return Problem();
             }
+
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateTopic([FromBody]TopicDTO topicDTO)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUser([FromRoute] Guid id)
         {
-            try
-            {
-                await _workWithTopic.CreateNewTopic(topicDTO);
-                return Ok();
+            try { 
+                return new JsonResult(await _workWithUser.GetUser(id));
             }
             catch (ArgumentException ex)
             {
@@ -51,12 +50,16 @@ namespace PL.Controllers
             }
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetTopic([FromRoute] Guid id)
+        [HttpGet("Topics/{id}")]
+        public async Task<IActionResult> GetTopics([FromRoute] Guid id)
         {
             try
             {
-                return new JsonResult(await _workWithTopic.GetTopic(id));
+                return new JsonResult(await _workWithUser.GetTopics(id));
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound();
             }
             catch (Exception ex)
             {
@@ -69,7 +72,7 @@ namespace PL.Controllers
         {
             try
             {
-                return new JsonResult(await _workWithTopic.GetMessages(id));
+                return new JsonResult(await _workWithUser.GetMessages(id));
             }
             catch (ArgumentException ex)
             {
@@ -81,17 +84,43 @@ namespace PL.Controllers
             }
         }
 
-        [HttpPatch("{id}")]
-        public async Task<IActionResult> UpdateTopic([FromRoute] Guid id, [FromBody]TopicDTO topicDTO)
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody]UserDTO userDTO)
         {
-            try 
-            { 
-                await _workWithTopic.UpdateTopic(id, topicDTO);
+            try {
+                await _workWithUser.CreateUser(userDTO);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
                 return NotFound();
+            }
+            catch (InvalidCastException ex)
+            {
+                return Problem("Alredy registred");
+            }
+            catch (Exception ex)
+            {
+                return Problem();
+            }
+
+        }
+
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody]UserDTO userDTO)
+        {
+            try 
+            { 
+                await _workWithUser.UpadteUser(id, userDTO);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound();
+            }
+            catch (InvalidCastException ex)
+            {
+                return Problem("Alredy registred");
             }
             catch (Exception ex)
             {
@@ -100,11 +129,11 @@ namespace PL.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTopic(Guid id)
+        public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
         {
-            try
+            try 
             { 
-                await _workWithTopic.DeleteTopic(id);
+            await _workWithUser.DeleteUser(id);
                 return Ok();
             }
             catch (ArgumentException ex)

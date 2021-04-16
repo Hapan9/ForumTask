@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
+using DAL.Enums;
 
-namespace PL.Models
+namespace BLL.DTOs
 {
-    public class UserInfoModel
+    public class UserDTO
     {
         [Required]
         public string Name { get; set; }
@@ -18,5 +18,9 @@ namespace PL.Models
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        public Roles Role { get; set; }
+
     }
 }

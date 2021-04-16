@@ -4,51 +4,76 @@ using System.Text.Json;
 using DAL.Models;
 using DAL;
 using System.Threading.Tasks;
+using BLL.Interfaces;
+using BLL.DTOs;
 
 namespace BLL
 {
-    public class WorkWithMessage
+    public class WorkWithMessage : IWorkWithMessage
     {
-        UnitOfWork unitOfWork = new UnitOfWork();
+        UnitOfWork _unitOfWork;
 
-        public async void CreateMessage(string _text, Guid _userId, Guid _topicId)
+        public WorkWithMessage(Db db)
         {
-            if (unitOfWork.Topics.Get(_topicId) == null && unitOfWork.Users.Get(_userId) == null)
-                return;
-            else if (_text.Length < 1)
-                return;
-
-            await Task.Run(() => unitOfWork.Messages.Create(new Message() { Text = _text, TopicId = _topicId, User_Id = _userId }));
+            _unitOfWork = new UnitOfWork(db);
         }
 
-        public async Task<string> GetMessage(Guid _id)
+        public async Task CreateMessage(MessageDTO messageDTO)
         {
-            return await Task.Run(() => JsonSerializer.Serialize((Message)unitOfWork.Messages.Get(_id)));
+            if (_unitOfWork.Topics.Get(messageDTO.TopicId) == null && _unitOfWork.Users.Get(messageDTO.UserId) == null)
+                throw new ArgumentException();
+            else if (messageDTO.Text.Length < 1)
+                throw new ArgumentException();
+
+            var newMessage = new Message()
+            {
+                Text = messageDTO.Text,
+                UserId = messageDTO.UserId,
+                TopicId = messageDTO.TopicId
+            };
+
+            await _unitOfWork.Messages.Create(newMessage);
         }
 
-        public async Task<string> GetMessages()
+        public async Task<Message> GetMessage(Guid id)
         {
-            return await Task.Run(() => JsonSerializer.Serialize((IEnumerable<Message>)unitOfWork.Messages.GetAll()));
+            if(_unitOfWork.Messages.Get(id) == null)
+                throw new ArgumentException();
+
+            return await Task.Run(() => _unitOfWork.Messages.Get(id));
         }
 
-        public async void UpdateMessage(Guid _messageId, string _text, Guid _userId, Guid _topicId)
+        public async Task<IEnumerable<Message>> GetMessages()
         {
-            if (unitOfWork.Topics.Get(_topicId) == null && unitOfWork.Users.Get(_userId) == null)
-                return;
-            else if (_text.Length < 1)
-                return;
-            else if (unitOfWork.Messages.Get(_messageId) == null)
-                return;
-
-            await Task.Run(() => unitOfWork.Messages.Update(new Message() { Id = _messageId, Text = _text, TopicId = _topicId, User_Id = _userId }));
+            return await Task.Run(() => _unitOfWork.Messages.GetAll());
         }
 
-        public async void DeleteMessage(Guid _messageId)
+        public async Task UpdateMessage(Guid messageId, MessageDTO messageDTO)
         {
-            if (unitOfWork.Messages.Get(_messageId) == null)
-                return;
+            if (_unitOfWork.Topics.Get(messageDTO.TopicId) == null && _unitOfWork.Users.Get(messageDTO.UserId) == null)
+                throw new ArgumentException();
+            else if (messageDTO.Text.Length < 1)
+                throw new ArgumentException();
+            else if (_unitOfWork.Messages.Get(messageId) == null)
+                throw new ArgumentException();
 
-            await Task.Run(() => unitOfWork.Messages.Delete(_messageId));
+            var updatedMessage = new Message()
+            {
+                Text = messageDTO.Text,
+                UserId = messageDTO.UserId,
+                TopicId = messageDTO.TopicId,
+                Id = messageId
+            };
+
+            await _unitOfWork.Messages.Update(updatedMessage);
+        }
+
+        public async Task DeleteMessage(Guid messageId)
+        {
+            if (_unitOfWork.Messages.Get(messageId) == null)
+                throw new ArgumentException();
+
+            await _unitOfWork.Messages.Delete(messageId);
         }
     }
 }
