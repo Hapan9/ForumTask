@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    interface IRepository<T>
+    public interface IRepository<T>
     {
         Task Create(T item);
 

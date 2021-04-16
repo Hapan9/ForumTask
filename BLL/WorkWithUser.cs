@@ -8,16 +8,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.DTOs;
+using DAL.Interfaces;
 
 namespace BLL
 {
     public class WorkWithUser : IWorkWithUser
     {
-        UnitOfWork _unitOfWork;
+        IUnitOfWork _unitOfWork;
 
-        public WorkWithUser(Db db)
+        public WorkWithUser(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = new UnitOfWork(db);
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreateUser(UserDTO userDTO)
@@ -49,7 +50,7 @@ namespace BLL
 
         public async Task<User> GetUser(Guid id)
         {
-            if(_unitOfWork.Users.Get(id) == null)
+            if(await _unitOfWork.Users.Get(id) == null)
                 throw new ArgumentException();
 
             return await _unitOfWork.Users.Get(id);
@@ -57,7 +58,7 @@ namespace BLL
 
         public async Task UpadteUser(Guid id, UserDTO userDTO)
         {
-            if (_unitOfWork.Users.Get(id) == null)
+            if (await _unitOfWork.Users.Get(id) == null)
                 throw new ArgumentException();
             else if (userDTO.Login.Length < 4 || userDTO.Password.Length < 4 || userDTO.Name.Length < 4)
                 throw new ArgumentException();
@@ -82,39 +83,42 @@ namespace BLL
 
         public async Task DeleteUser(Guid id)
         {
-            if (_unitOfWork.Users.Get(id) == null)
+            if (await _unitOfWork.Users.Get(id) == null)
                 throw new ArgumentException();
 
             await _unitOfWork.Users.Delete(id);
         }
 
-        public async Task<bool> CheckUserForm(string userLogin, string userPassword)
+        public async Task<bool> CheckUserForm(AutorizationDTO autorizationDTO)
         {
-            if((await _unitOfWork.Users.GetAll()).Count(u => u.Login == userLogin) == 0)
+            if((await _unitOfWork.Users.GetAll()).Count(u => u.Login == autorizationDTO.Login) == 0)
                 throw new ArgumentException();
 
-                if ((await _unitOfWork.Users.GetAll()).First(u => u.Login == userLogin).Password != Hashing.GetHashString(userPassword))
-                    return false;
-                else 
-                    return true;
+            if ((await _unitOfWork.Users.GetAll()).First(u => u.Login == autorizationDTO.Login).Password != Hashing.GetHashString(autorizationDTO.Password))
+                return false;
+            else 
+                return true;
         }
 
         public async Task<IEnumerable<Topic>> GetTopics(Guid id)
         {
-            if (_unitOfWork.Users.Get(id) == null)
+            if (await _unitOfWork.Users.Get(id) == null)
                 throw new ArgumentException();
 
-            return (await _unitOfWork.Topics.GetAll()).Where(t => t.UserId == id).ToList();
+            var topicList = (await _unitOfWork.Topics.GetAll()).Where(t => t.UserId == id).ToList();
+
+            return topicList;
         }
 
         public async Task<IEnumerable<Message>> GetMessages(Guid id)
         {
-            if ((await _unitOfWork.Users.GetAll()).Count(u => u.Id == id) != 0)
-                return (await _unitOfWork.Messages.GetAll()).Where(m => m.UserId == id).ToList();
+            if ((await _unitOfWork.Users.GetAll()).Count(u => u.Id == id) == 0)
+                throw new ArgumentException();
+
+            var messageList = (await _unitOfWork.Messages.GetAll()).Where(m => m.UserId == id).ToList();
+
+            return messageList;
             
-            throw new ArgumentException();
-
-
         }
     }
 }

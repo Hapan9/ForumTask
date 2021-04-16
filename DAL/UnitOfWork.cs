@@ -1,50 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using DAL.Repositories;
+using DAL.Interfaces;
+using DAL.Models;
 
 namespace DAL
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly Db _db;
-        private UserRepository users;
-        private TopicRepository topics;
-        private MessageRepository messages;
+        private IRepository<User> _users;
+        private IRepository<Topic> _topics;
+        private IRepository<Message> _messages;
 
 
-        public UnitOfWork(Db db)
+        public UnitOfWork(Db db, IRepository<User> users, IRepository<Topic> topics, IRepository<Message> messages)
         {
             _db = db;
+            _users = users;
+            _topics = topics;
+            _messages = messages;
         }
 
-        public UserRepository Users { get
-            {
-                if (users == null)
-                    users = new UserRepository(_db);
-                return users;
-            } 
-        }
-
-        public TopicRepository Topics {
-            get
-            {
-                if (topics == null)
-                    topics = new TopicRepository(_db);
-                return topics;
-            }
-        
-        }
-
-        public MessageRepository Messages
+        public IRepository<User> Users
         {
             get
             {
-                if (messages == null)
-                    messages = new MessageRepository(_db);
-                return messages;
+                return _users;
             }
+        }
 
+        public IRepository<Topic> Topics
+        {
+            get
+            {
+                return _topics;
+            }
+        }
+
+        public IRepository<Message> Messages
+        {
+            get
+            {
+                return _messages;
+            }
         }
     }
 }

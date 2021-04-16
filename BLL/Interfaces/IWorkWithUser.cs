@@ -19,7 +19,7 @@ namespace BLL.Interfaces
 
         Task DeleteUser(Guid id);
 
-        Task<bool> CheckUserForm(string userLogin, string userPassword);
+        Task<bool> CheckUserForm(AutorizationDTO autorizationDTO);
 
         Task<IEnumerable<Topic>> GetTopics(Guid id);
 

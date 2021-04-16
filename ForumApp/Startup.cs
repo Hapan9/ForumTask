@@ -10,6 +10,10 @@ using System;
 using BLL;
 using BLL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using DAL;
+using DAL.Interfaces;
+using DAL.Models;
+using DAL.Repositories;
 
 namespace PL
 {
@@ -26,13 +30,21 @@ namespace PL
         {
             services.AddControllers();
 
-            services.AddDbContext<DAL.Db>(o => o.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ForumDB;Trusted_Connection=True;"));
+            services.AddDbContext<Db>(o => o.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ForumDB;Trusted_Connection=True;"));
 
             services.AddTransient<IWorkWithUser, WorkWithUser>();
 
             services.AddTransient<IWorkWithTopic, WorkWithTopic>();
 
             services.AddTransient<IWorkWithMessage, WorkWithMessage>();
+
+            services.AddTransient<IRepository<Message>, MessageRepository>();
+
+            services.AddTransient<IRepository<Topic>, TopicRepository>();
+
+            services.AddTransient<IRepository<User>, UserRepository>();
+
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddSwaggerGen();
 

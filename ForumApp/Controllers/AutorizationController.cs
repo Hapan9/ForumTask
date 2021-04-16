@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BLL.DTOs;
 
 namespace PL.Controllers
 {
@@ -21,11 +22,11 @@ namespace PL.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UserAutorize([FromQuery]string userLigin, [FromQuery]string userPassword)
+        public async Task<IActionResult> UserAutorize([FromBody]AutorizationDTO autorizationDTO)
         {
             try
             {
-                if (await _workWithUser.CheckUserForm(userLigin, userPassword))
+                if (await _workWithUser.CheckUserForm(autorizationDTO))
                 {
                     return Ok();
                 }

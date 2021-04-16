@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DAL.Models;
 using DAL;
+using DAL.Interfaces;
 using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.DTOs;
@@ -11,16 +12,16 @@ namespace BLL
 {
     public class WorkWithTopic : IWorkWithTopic
     {
-        UnitOfWork _unitOfWork;
+        IUnitOfWork _unitOfWork;
 
-        public WorkWithTopic(Db db)
+        public WorkWithTopic(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = new UnitOfWork(db);
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreateNewTopic(TopicDTO topicDTO)
         {
-            if (_unitOfWork.Users.Get(topicDTO.UserId) == null)
+            if (await _unitOfWork.Users.Get(topicDTO.UserId) == null)
                 throw new ArgumentException();
 
             var newTopic = new Topic()
@@ -35,7 +36,7 @@ namespace BLL
 
         public async Task UpdateTopic(Guid id, TopicDTO topicDTO)
         {
-            if (_unitOfWork.Topics.Get(id) == null || _unitOfWork.Users.Get(topicDTO.UserId) == null)
+            if (await _unitOfWork.Topics.Get(id) == null || await _unitOfWork.Users.Get(topicDTO.UserId) == null)
                 throw new ArgumentException();
 
             var UpdatedTopic = new Topic()
@@ -50,7 +51,7 @@ namespace BLL
 
         public async Task DeleteTopic(Guid id)
         {
-            if (_unitOfWork.Topics.Get(id) == null)
+            if (await _unitOfWork.Topics.Get(id) == null)
                 throw new ArgumentException();
 
             await _unitOfWork.Topics.Delete(id);
@@ -58,7 +59,7 @@ namespace BLL
 
         public async Task<Topic> GetTopic(Guid id)
         {
-            if (_unitOfWork.Topics.Get(id) == null)
+            if (await _unitOfWork.Topics.Get(id) == null)
                 throw new ArgumentException();
 
             return await _unitOfWork.Topics.Get(id);
@@ -71,10 +72,12 @@ namespace BLL
 
         public async Task<IEnumerable<Message>> GetMessages(Guid id)
         {
-            if (_unitOfWork.Topics.Get(id) == null)
+            if (await _unitOfWork.Topics.Get(id) == null)
                 throw new ArgumentException();
 
-            return (await _unitOfWork.Messages.GetAll()).Where(m => m.TopicId == id).ToList();
+            var messagesList = (await _unitOfWork.Messages.GetAll()).Where(m => m.TopicId == id).ToList();
+
+            return messagesList;
         }
     }
 }

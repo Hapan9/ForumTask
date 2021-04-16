@@ -6,21 +6,22 @@ using DAL;
 using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.DTOs;
+using DAL.Interfaces;
 
 namespace BLL
 {
     public class WorkWithMessage : IWorkWithMessage
     {
-        UnitOfWork _unitOfWork;
+        IUnitOfWork _unitOfWork;
 
-        public WorkWithMessage(Db db)
+        public WorkWithMessage(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = new UnitOfWork(db);
+            _unitOfWork = unitOfWork;
         }
 
         public async Task CreateMessage(MessageDTO messageDTO)
         {
-            if (_unitOfWork.Topics.Get(messageDTO.TopicId) == null && _unitOfWork.Users.Get(messageDTO.UserId) == null)
+            if (await _unitOfWork.Topics.Get(messageDTO.TopicId) == null && await _unitOfWork.Users.Get(messageDTO.UserId) == null)
                 throw new ArgumentException();
             else if (messageDTO.Text.Length < 1)
                 throw new ArgumentException();
@@ -37,7 +38,7 @@ namespace BLL
 
         public async Task<Message> GetMessage(Guid id)
         {
-            if(_unitOfWork.Messages.Get(id) == null)
+            if(await _unitOfWork.Messages.Get(id) == null)
                 throw new ArgumentException();
 
             return await _unitOfWork.Messages.Get(id);
@@ -50,11 +51,11 @@ namespace BLL
 
         public async Task UpdateMessage(Guid messageId, MessageDTO messageDTO)
         {
-            if (_unitOfWork.Topics.Get(messageDTO.TopicId) == null && _unitOfWork.Users.Get(messageDTO.UserId) == null)
+            if (await _unitOfWork.Topics.Get(messageDTO.TopicId) == null && await _unitOfWork.Users.Get(messageDTO.UserId) == null)
                 throw new ArgumentException();
             else if (messageDTO.Text.Length < 1)
                 throw new ArgumentException();
-            else if (_unitOfWork.Messages.Get(messageId) == null)
+            else if (await _unitOfWork.Messages.Get(messageId) == null)
                 throw new ArgumentException();
 
             var updatedMessage = new Message()
@@ -70,7 +71,7 @@ namespace BLL
 
         public async Task DeleteMessage(Guid messageId)
         {
-            if (_unitOfWork.Messages.Get(messageId) == null)
+            if (await _unitOfWork.Messages.Get(messageId) == null)
                 throw new ArgumentException();
 
             await _unitOfWork.Messages.Delete(messageId);
