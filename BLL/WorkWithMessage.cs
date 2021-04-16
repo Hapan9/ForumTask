@@ -40,12 +40,12 @@ namespace BLL
             if(_unitOfWork.Messages.Get(id) == null)
                 throw new ArgumentException();
 
-            return await Task.Run(() => _unitOfWork.Messages.Get(id));
+            return await _unitOfWork.Messages.Get(id);
         }
 
         public async Task<IEnumerable<Message>> GetMessages()
         {
-            return await Task.Run(() => _unitOfWork.Messages.GetAll());
+            return await _unitOfWork.Messages.GetAll();
         }
 
         public async Task UpdateMessage(Guid messageId, MessageDTO messageDTO)

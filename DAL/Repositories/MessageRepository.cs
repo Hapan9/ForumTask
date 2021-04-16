@@ -4,6 +4,7 @@ using System.Linq;
 using DAL.Models;
 using DAL.Interfaces;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
@@ -18,39 +19,35 @@ namespace DAL.Repositories
 
         public async Task Create(Message item)
         {
-            await Task.Run(() => _db.Messages.AddAsync(item));
-            _db.SaveChanges();
+            await _db.Messages.AddAsync(item);
+            await _db.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
         {
-            await Task.Run(() => _db.Messages.Remove(_db.Messages.First(m => m.Id == id)));
-            _db.SaveChanges();
+            _db.Messages.Remove(await _db.Messages.FirstAsync(m => m.Id == id));
+            await _db.SaveChangesAsync();
         }
 
-        public Message Get(Guid id)
+        public async Task<Message> Get(Guid id)
         {
-            if (_db.Messages.Where(m => m.Id == id).Count() == 0)
+            if (await _db.Messages.CountAsync(m => m.Id == id) == 0)
                 return null;
 
-            return _db.Messages.First(m => m.Id == id);
+            return await _db.Messages.FirstAsync(m => m.Id == id);
         }
 
-        public IEnumerable<Message> GetAll()
+        public async Task<IEnumerable<Message>> GetAll()
         {
-            return _db.Messages;
+            return await _db.Messages.ToListAsync();
         }
 
         public async Task Update(Message item)
         {
-            await Task.Run(() => 
-                {
-                    _db.Messages.Remove(_db.Messages.First(m => m.Id == item.Id));
-                    _db.Messages.Add(item);
-                }
-            );
+            _db.Messages.Remove(await _db.Messages.FirstAsync(m => m.Id == item.Id));
+            await _db.Messages.AddAsync(item);
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
     }
 }

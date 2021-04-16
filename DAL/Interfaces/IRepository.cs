@@ -11,9 +11,9 @@ namespace DAL.Interfaces
 
         Task Delete(Guid id);
 
-        T Get(Guid id);
+        Task<T> Get(Guid id);
 
-        IEnumerable<T> GetAll();
+        Task<IEnumerable<T>> GetAll();
 
         Task Update(T item);
     }

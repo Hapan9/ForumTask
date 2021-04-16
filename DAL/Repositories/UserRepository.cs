@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DAL.Interfaces;
 using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
@@ -18,47 +19,41 @@ namespace DAL.Repositories
 
         public async Task Create(User item)
         {
-            await Task.Run(() =>_db.Users.AddAsync(item));
-            _db.SaveChanges();
+            await _db.Users.AddAsync(item);
+            await _db.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
         {
-            await Task.Run(() => 
-            {
-                _db.Messages.RemoveRange(_db.Messages.Where(m => m.UserId == id));
+            _db.Messages.RemoveRange(_db.Messages.Where(m => m.UserId == id));
 
-                foreach (Topic topic in _db.Topics.Where(t => t.UserId == id).ToList())
-                    _db.Messages.RemoveRange(_db.Messages.Where(m => m.TopicId == topic.Id));
+            foreach (Topic topic in await _db.Topics.Where(t => t.UserId == id).ToListAsync())
+                _db.Messages.RemoveRange(_db.Messages.Where(m => m.TopicId == topic.Id));
 
-                _db.Users.Remove(_db.Users.First(u => u.Id == id));
-            });
-            _db.SaveChanges();
+            _db.Users.Remove(await _db.Users.FirstAsync(u => u.Id == id));
+
+            await _db.SaveChangesAsync();
         }
 
-        public User Get(Guid id)
+        public async Task<User> Get(Guid id)
         {
-            if (_db.Users.Count(u => u.Id == id) == 0)
+            if (await _db.Users.CountAsync(u => u.Id == id) == 0)
                 return null;
 
-            return _db.Users.First(u => u.Id == id);
+            return await _db.Users.FirstAsync(u => u.Id == id);
         }
 
-        public IEnumerable<User> GetAll()
+        public async Task<IEnumerable<User>> GetAll()
         {
-            return _db.Users;
+            return await _db.Users.ToListAsync();
         }
 
         public async Task Update(User item)
         {
-            await Task.Run(() =>
-                {
-                    _db.Remove(_db.Users.First(u => u.Id == item.Id));
-                    _db.Add(item);
-                }
-            );
+            _db.Remove(await _db.Users.FirstAsync(u => u.Id == item.Id));
+            await _db.AddAsync(item);
 
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
     }
 }

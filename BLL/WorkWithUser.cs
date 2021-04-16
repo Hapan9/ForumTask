@@ -26,7 +26,7 @@ namespace BLL
                 throw new ArgumentException();
             else if (userDTO.Surname != null && userDTO.Surname.Length < 4)
                 throw new ArgumentException();
-            else if (_unitOfWork.Users.GetAll().Count(u => u.Login == userDTO.Login) > 0)
+            else if ((await _unitOfWork.Users.GetAll()).Count(u => u.Login == userDTO.Login) > 0)
                 throw new InvalidCastException();
 
             var newUser = new User()
@@ -38,12 +38,13 @@ namespace BLL
                 Role = userDTO.Role
             };
 
+
             await _unitOfWork.Users.Create(newUser);
         }
 
         public async Task<IEnumerable<User>> GetUsers()
         {
-            return await Task.Run(() => _unitOfWork.Users.GetAll());
+            return await _unitOfWork.Users.GetAll();
         }
 
         public async Task<User> GetUser(Guid id)
@@ -51,7 +52,7 @@ namespace BLL
             if(_unitOfWork.Users.Get(id) == null)
                 throw new ArgumentException();
 
-            return await Task.Run(() => _unitOfWork.Users.Get(id));
+            return await _unitOfWork.Users.Get(id);
         }
 
         public async Task UpadteUser(Guid id, UserDTO userDTO)
@@ -62,7 +63,7 @@ namespace BLL
                 throw new ArgumentException();
             else if (userDTO.Surname != null && userDTO.Surname.Length < 4)
                 throw new ArgumentException();
-            else if (_unitOfWork.Users.GetAll().Count(u => u.Login == userDTO.Login) > 0)
+            else if ((await _unitOfWork.Users.GetAll()).Count(u => u.Login == userDTO.Login) > 0)
                 throw new InvalidCastException();
 
             var updatedUser = new User()
@@ -89,17 +90,13 @@ namespace BLL
 
         public async Task<bool> CheckUserForm(string userLogin, string userPassword)
         {
-            if(_unitOfWork.Users.GetAll().Count(u => u.Login == userLogin) == 0)
+            if((await _unitOfWork.Users.GetAll()).Count(u => u.Login == userLogin) == 0)
                 throw new ArgumentException();
 
-            return await Task.Run(() => 
-                {
-                    if (_unitOfWork.Users.GetAll().First(u => u.Login == userLogin).Password != Hashing.GetHashString(userPassword))
-                        return false;
-                    else 
-                        return true;
-                }
-            );
+                if ((await _unitOfWork.Users.GetAll()).First(u => u.Login == userLogin).Password != Hashing.GetHashString(userPassword))
+                    return false;
+                else 
+                    return true;
         }
 
         public async Task<IEnumerable<Topic>> GetTopics(Guid id)
@@ -107,15 +104,15 @@ namespace BLL
             if (_unitOfWork.Users.Get(id) == null)
                 throw new ArgumentException();
 
-            return await Task.Run(() => _unitOfWork.Topics.GetAll().Where(t => t.UserId == id).ToList());
+            return (await _unitOfWork.Topics.GetAll()).Where(t => t.UserId == id).ToList();
         }
 
         public async Task<IEnumerable<Message>> GetMessages(Guid id)
         {
-            if (_unitOfWork.Users.GetAll().Count(u => u.Id == id) != 0)
-                return await Task.Run(() => _unitOfWork.Messages.GetAll().Where(m => m.UserId == id).ToList());
-            else
-                throw new ArgumentException();
+            if ((await _unitOfWork.Users.GetAll()).Count(u => u.Id == id) != 0)
+                return (await _unitOfWork.Messages.GetAll()).Where(m => m.UserId == id).ToList();
+            
+            throw new ArgumentException();
 
 
         }

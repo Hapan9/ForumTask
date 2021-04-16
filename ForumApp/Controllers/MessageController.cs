@@ -26,7 +26,7 @@ namespace PL.Controllers
         {
             try
             {
-                return new JsonResult(await Task.Run(() => _workWithMessage.GetMessages().Result));
+                return new JsonResult(await _workWithMessage.GetMessages());
             }
             catch (Exception ex)
             {

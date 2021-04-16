@@ -61,12 +61,12 @@ namespace BLL
             if (_unitOfWork.Topics.Get(id) == null)
                 throw new ArgumentException();
 
-            return await Task.Run(() => _unitOfWork.Topics.Get(id));
+            return await _unitOfWork.Topics.Get(id);
         }
 
         public async Task<IEnumerable<Topic>> GetTopics()
         {
-            return await Task.Run(() => _unitOfWork.Topics.GetAll());
+            return await _unitOfWork.Topics.GetAll();
         }
 
         public async Task<IEnumerable<Message>> GetMessages(Guid id)
@@ -74,7 +74,7 @@ namespace BLL
             if (_unitOfWork.Topics.Get(id) == null)
                 throw new ArgumentException();
 
-            return await Task.Run(() => _unitOfWork.Messages.GetAll().Where(m => m.TopicId == id).ToList());
+            return (await _unitOfWork.Messages.GetAll()).Where(m => m.TopicId == id).ToList();
         }
     }
 }
