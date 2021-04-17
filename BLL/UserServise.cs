@@ -9,16 +9,20 @@ using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.DTOs;
 using DAL.Interfaces;
+using BLL.Mapers;
+using AutoMapper;
 
 namespace BLL
 {
-    public class WorkWithUser : IWorkWithUser
+    public class UserServise : IUserServise
     {
         IUnitOfWork _unitOfWork;
+        IMapper _mapper;
 
-        public WorkWithUser(IUnitOfWork unitOfWork)
+        public UserServise(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _mapper = AutoMapperProfile.InitialazeAutoMapper().CreateMapper();
         }
 
         public async Task CreateUser(UserDTO userDTO)
@@ -30,15 +34,7 @@ namespace BLL
             else if ((await _unitOfWork.Users.GetAll()).Count(u => u.Login == userDTO.Login) > 0)
                 throw new InvalidCastException();
 
-            var newUser = new User()
-            {
-                Name = userDTO.Name,
-                Surname = userDTO.Surname,
-                Login = userDTO.Login,
-                Password = Hashing.GetHashString(userDTO.Password),
-                Role = userDTO.Role
-            };
-
+            var newUser = _mapper.Map<User>(userDTO);
 
             await _unitOfWork.Users.Create(newUser);
         }
@@ -67,15 +63,9 @@ namespace BLL
             else if ((await _unitOfWork.Users.GetAll()).Count(u => u.Login == userDTO.Login) > 0)
                 throw new InvalidCastException();
 
-            var updatedUser = new User()
-            {
-                Name = userDTO.Name,
-                Surname = userDTO.Surname,
-                Login = userDTO.Login,
-                Password = Hashing.GetHashString(userDTO.Password),
-                Role = userDTO.Role,
-                Id = id
-            };
+            var updatedUser = _mapper.Map<User>(userDTO);
+
+            updatedUser.Id = id;
 
             await _unitOfWork.Users.Update(updatedUser);
                     

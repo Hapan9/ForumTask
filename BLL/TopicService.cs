@@ -7,16 +7,20 @@ using DAL.Interfaces;
 using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.DTOs;
+using BLL.Mapers;
+using AutoMapper;
 
 namespace BLL
 {
-    public class WorkWithTopic : IWorkWithTopic
+    public class TopicService : ITopicService
     {
         IUnitOfWork _unitOfWork;
+        IMapper _mapper;
 
-        public WorkWithTopic(IUnitOfWork unitOfWork)
+        public TopicService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _mapper = AutoMapperProfile.InitialazeAutoMapper().CreateMapper();
         }
 
         public async Task CreateNewTopic(TopicDTO topicDTO)
@@ -24,11 +28,7 @@ namespace BLL
             if (await _unitOfWork.Users.Get(topicDTO.UserId) == null)
                 throw new ArgumentException();
 
-            var newTopic = new Topic()
-            {
-                Name = topicDTO.Name,
-                UserId = topicDTO.UserId
-            };
+            var newTopic = _mapper.Map<Topic>(topicDTO);
 
             await _unitOfWork.Topics.Create(newTopic);
 
@@ -39,12 +39,9 @@ namespace BLL
             if (await _unitOfWork.Topics.Get(id) == null || await _unitOfWork.Users.Get(topicDTO.UserId) == null)
                 throw new ArgumentException();
 
-            var UpdatedTopic = new Topic()
-            {
-                Id = id,
-                Name = topicDTO.Name,
-                UserId = topicDTO.UserId
-            };
+            var UpdatedTopic = _mapper.Map<Topic>(topicDTO);
+
+            UpdatedTopic.Id = id;
 
             await _unitOfWork.Topics.Update(UpdatedTopic);
         }

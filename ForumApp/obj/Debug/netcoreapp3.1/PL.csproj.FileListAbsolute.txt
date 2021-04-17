@@ -198,3 +198,4 @@ C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swas
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\AutoMapper.dll

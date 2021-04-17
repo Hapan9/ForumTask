@@ -13,9 +13,9 @@ namespace PL.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        IWorkWithUser _workWithUser;
+        IUserServise _workWithUser;
 
-        public UserController(IWorkWithUser workWithUser)
+        public UserController(IUserServise workWithUser)
         {
             _workWithUser = workWithUser;
         }
@@ -50,7 +50,7 @@ namespace PL.Controllers
             }
         }
 
-        [HttpGet("Topics/{id}")]
+        [HttpGet("{id}/Topics")]
         public async Task<IActionResult> GetTopics([FromRoute] Guid id)
         {
             try
@@ -67,7 +67,7 @@ namespace PL.Controllers
             }
         }
 
-        [HttpGet("Messages/{id}")]
+        [HttpGet("{id}/Messages")]
         public async Task<IActionResult> GetMessages([FromRoute] Guid id)
         {
             try
@@ -101,7 +101,7 @@ namespace PL.Controllers
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
 
         }

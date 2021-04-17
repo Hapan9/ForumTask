@@ -13,9 +13,9 @@ namespace PL.Controllers
     [ApiController]
     public class TopicController : ControllerBase
     {
-        IWorkWithTopic _workWithTopic;
+        ITopicService _workWithTopic;
 
-        public TopicController(IWorkWithTopic workWithTopic)
+        public TopicController(ITopicService workWithTopic)
         {
             _workWithTopic = workWithTopic;
         }
@@ -64,7 +64,7 @@ namespace PL.Controllers
             }
         }
 
-        [HttpGet("Messages/{id}")]
+        [HttpGet("{id}/Messages")]
         public async Task<IActionResult> GetMessages([FromRoute] Guid id)
         {
             try

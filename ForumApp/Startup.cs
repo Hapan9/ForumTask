@@ -14,6 +14,7 @@ using DAL;
 using DAL.Interfaces;
 using DAL.Models;
 using DAL.Repositories;
+using AutoMapper;
 
 namespace PL
 {
@@ -32,11 +33,11 @@ namespace PL
 
             services.AddDbContext<Db>(o => o.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ForumDB;Trusted_Connection=True;"));
 
-            services.AddTransient<IWorkWithUser, WorkWithUser>();
+            services.AddTransient<IUserServise, UserServise>();
 
-            services.AddTransient<IWorkWithTopic, WorkWithTopic>();
+            services.AddTransient<ITopicService, TopicService>();
 
-            services.AddTransient<IWorkWithMessage, WorkWithMessage>();
+            services.AddTransient<IMessageService, MessageService>();
 
             services.AddTransient<IRepository<Message>, MessageRepository>();
 

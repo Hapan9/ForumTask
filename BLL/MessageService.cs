@@ -7,16 +7,20 @@ using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.DTOs;
 using DAL.Interfaces;
+using AutoMapper;
+using BLL.Mapers;
 
 namespace BLL
 {
-    public class WorkWithMessage : IWorkWithMessage
+    public class MessageService : IMessageService
     {
         IUnitOfWork _unitOfWork;
+        IMapper _mapper;
 
-        public WorkWithMessage(IUnitOfWork unitOfWork)
+        public MessageService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            _mapper = AutoMapperProfile.InitialazeAutoMapper().CreateMapper();
         }
 
         public async Task CreateMessage(MessageDTO messageDTO)
@@ -26,12 +30,7 @@ namespace BLL
             else if (messageDTO.Text.Length < 1)
                 throw new ArgumentException();
 
-            var newMessage = new Message()
-            {
-                Text = messageDTO.Text,
-                UserId = messageDTO.UserId,
-                TopicId = messageDTO.TopicId
-            };
+            var newMessage = _mapper.Map<Message>(messageDTO);
 
             await _unitOfWork.Messages.Create(newMessage);
         }
@@ -49,32 +48,28 @@ namespace BLL
             return await _unitOfWork.Messages.GetAll();
         }
 
-        public async Task UpdateMessage(Guid messageId, MessageDTO messageDTO)
+        public async Task UpdateMessage(Guid id, MessageDTO messageDTO)
         {
             if (await _unitOfWork.Topics.Get(messageDTO.TopicId) == null && await _unitOfWork.Users.Get(messageDTO.UserId) == null)
                 throw new ArgumentException();
             else if (messageDTO.Text.Length < 1)
                 throw new ArgumentException();
-            else if (await _unitOfWork.Messages.Get(messageId) == null)
+            else if (await _unitOfWork.Messages.Get(id) == null)
                 throw new ArgumentException();
 
-            var updatedMessage = new Message()
-            {
-                Text = messageDTO.Text,
-                UserId = messageDTO.UserId,
-                TopicId = messageDTO.TopicId,
-                Id = messageId
-            };
+            var updatedMessage = _mapper.Map<Message>(messageDTO);
+
+            updatedMessage.Id = id;
 
             await _unitOfWork.Messages.Update(updatedMessage);
         }
 
-        public async Task DeleteMessage(Guid messageId)
+        public async Task DeleteMessage(Guid id)
         {
-            if (await _unitOfWork.Messages.Get(messageId) == null)
+            if (await _unitOfWork.Messages.Get(id) == null)
                 throw new ArgumentException();
 
-            await _unitOfWork.Messages.Delete(messageId);
+            await _unitOfWork.Messages.Delete(id);
         }
     }
 }

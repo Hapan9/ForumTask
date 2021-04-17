@@ -14,9 +14,9 @@ namespace PL.Controllers
     [ApiController]
     public class MessageController : ControllerBase
     {
-        IWorkWithMessage _workWithMessage;
+        IMessageService _workWithMessage;
 
-        public MessageController(IWorkWithMessage workWithMessage)
+        public MessageController(IMessageService workWithMessage)
         {
             _workWithMessage = workWithMessage;
         }

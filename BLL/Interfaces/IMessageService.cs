@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace BLL.Interfaces
 {
-    public interface IWorkWithMessage
+    public interface IMessageService
     {
         Task CreateMessage(MessageDTO messageDTO);
         Task DeleteMessage(Guid messageId);

@@ -14,9 +14,9 @@ namespace PL.Controllers
     public class AutorizationController : ControllerBase
     {
 
-        IWorkWithUser _workWithUser;
+        IUserServise _workWithUser;
 
-        public AutorizationController(IWorkWithUser workWithUser)
+        public AutorizationController(IUserServise workWithUser)
         {
             _workWithUser = workWithUser;
         }

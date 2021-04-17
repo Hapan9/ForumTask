@@ -6,7 +6,7 @@ using DAL.Models;
 
 namespace BLL.Interfaces
 {
-    public interface IWorkWithUser
+    public interface IUserServise
     {
 
         Task<User> GetUser(Guid id);

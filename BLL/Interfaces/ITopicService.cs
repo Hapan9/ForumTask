@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace BLL.Interfaces
 {
-    public interface IWorkWithTopic
+    public interface ITopicService
     {
 
         Task CreateNewTopic(TopicDTO topicDTO);
