@@ -27,7 +27,7 @@ namespace DAL.Repositories
         {
             _db.Messages.RemoveRange(_db.Messages.Where(m => m.UserId == id));
 
-            foreach (Topic topic in await _db.Topics.Where(t => t.UserId == id).ToListAsync())
+            foreach (var topic in await _db.Topics.Where(t => t.UserId == id).ToListAsync())
                 _db.Messages.RemoveRange(_db.Messages.Where(m => m.TopicId == topic.Id));
 
             _db.Users.Remove(await _db.Users.FirstAsync(u => u.Id == id));

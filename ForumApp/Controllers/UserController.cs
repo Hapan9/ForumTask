@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
-using BLL.Interfaces;
 using BLL.DTOs;
+using BLL.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PL.Controllers
 {
@@ -14,9 +11,9 @@ namespace PL.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        IUserServise _workWithUser;
+        private readonly IUserService _workWithUser;
 
-        public UserController(IUserServise workWithUser)
+        public UserController(IUserService workWithUser)
         {
             _workWithUser = workWithUser;
         }
@@ -30,24 +27,24 @@ namespace PL.Controllers
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
-
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUser([FromRoute] Guid id)
         {
-            try { 
+            try
+            {
                 return new JsonResult(await _workWithUser.GetUser(id));
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
 
@@ -60,11 +57,11 @@ namespace PL.Controllers
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
 
@@ -77,57 +74,57 @@ namespace PL.Controllers
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
-            }
-            catch (Exception ex)
-            {
-                return Problem();
-            }
-        }
-
-        [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody]UserDTO userDTO)
-        {
-            try {
-                await _workWithUser.CreateUser(userDTO);
-                return Ok();
-            }
-            catch (ArgumentException ex)
-            {
-                return NotFound();
-            }
-            catch (InvalidCastException ex)
-            {
-                return Problem("Alredy registred");
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
             }
-
         }
 
-        [Authorize(Roles = "Administrator, Moderator")]
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody]UserDTO userDTO)
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] UserDto userDto)
         {
-            try 
-            { 
-                await _workWithUser.UpadteUser(id, userDTO);
+            try
+            {
+                await _workWithUser.CreateUser(userDto);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
             catch (InvalidCastException ex)
             {
-                return Problem("Alredy registred");
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
+            }
+        }
+
+        [Authorize(Roles = "Administrator, Moderator")]
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody] UserDto userDto)
+        {
+            try
+            {
+                await _workWithUser.UpdateUser(id, userDto);
+                return Ok();
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (InvalidCastException ex)
+            {
+                return Problem(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
             }
         }
 
@@ -135,18 +132,18 @@ namespace PL.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
         {
-            try 
-            { 
-            await _workWithUser.DeleteUser(id);
+            try
+            {
+                await _workWithUser.DeleteUser(id);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
     }

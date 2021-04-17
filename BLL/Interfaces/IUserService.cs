@@ -6,20 +6,19 @@ using DAL.Models;
 
 namespace BLL.Interfaces
 {
-    public interface IUserServise
+    public interface IUserService
     {
-
         Task<User> GetUser(Guid id);
 
         Task<IEnumerable<User>> GetUsers();
 
-        Task CreateUser(UserDTO userDTO);
+        Task CreateUser(UserDto userDto);
 
-        Task UpadteUser(Guid id, UserDTO userDTO);
+        Task UpdateUser(Guid id, UserDto userDto);
 
         Task DeleteUser(Guid id);
 
-        Task<User> CheckUserForm(AutorizationDTO autorizationDTO);
+        Task<User> CheckUserForm(AuthorizationDto authorizationDto);
 
         Task<IEnumerable<Topic>> GetTopics(Guid id);
 

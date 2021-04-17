@@ -1,18 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.EntityFrameworkCore;
-using DAL.Models;
 using DAL.Enums;
+using DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
-    public class Db:DbContext
+    public class Db : DbContext
     {
-        public Db(DbContextOptions<Db> options): base(options)
+        public Db(DbContextOptions<Db> options) : base(options)
         {
             Database.EnsureCreated();
         }
+
+        public DbSet<User> Users { get; set; }
+        public DbSet<Topic> Topics { get; set; }
+        public DbSet<Message> Messages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -31,12 +33,12 @@ namespace DAL
                 .WithMany(u => u.Messages)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
-            Guid u1 = Guid.NewGuid();
-            Guid u2 = Guid.NewGuid();
-            Guid u3 = Guid.NewGuid();
+            var u1 = Guid.NewGuid();
+            var u2 = Guid.NewGuid();
+            var u3 = Guid.NewGuid();
 
             modelBuilder.Entity<User>().HasData(
-                new User()
+                new User
                 {
                     Id = u1,
                     Name = "User",
@@ -45,7 +47,7 @@ namespace DAL
                     Password = Guid.NewGuid(),
                     Role = Roles.Administrator
                 },
-                new User()
+                new User
                 {
                     Id = u2,
                     Name = "User",
@@ -54,7 +56,7 @@ namespace DAL
                     Password = Guid.NewGuid(),
                     Role = Roles.Moderator
                 },
-                new User()
+                new User
                 {
                     Id = u3,
                     Name = "User",
@@ -65,17 +67,17 @@ namespace DAL
                 }
             );
 
-            Guid t1 = Guid.NewGuid();
-            Guid t2 = Guid.NewGuid();
+            var t1 = Guid.NewGuid();
+            var t2 = Guid.NewGuid();
 
             modelBuilder.Entity<Topic>().HasData(
-                new Topic()
+                new Topic
                 {
                     Id = t1,
                     Name = "First topic",
                     UserId = u1
                 },
-                new Topic()
+                new Topic
                 {
                     Id = t2,
                     Name = "Second topic",
@@ -84,28 +86,28 @@ namespace DAL
             );
 
             modelBuilder.Entity<Message>().HasData(
-                new Message()
+                new Message
                 {
                     Id = Guid.NewGuid(),
                     Text = "Message 0-0",
                     TopicId = t1,
                     UserId = u1
                 },
-                new Message()
+                new Message
                 {
                     Id = Guid.NewGuid(),
                     Text = "Message 0-1",
                     TopicId = t1,
                     UserId = u2
                 },
-                new Message()
+                new Message
                 {
                     Id = Guid.NewGuid(),
                     Text = "Message 1-0",
                     TopicId = t2,
                     UserId = u1
                 },
-                new Message()
+                new Message
                 {
                     Id = Guid.NewGuid(),
                     Text = "Message 1-1",
@@ -113,12 +115,6 @@ namespace DAL
                     UserId = u2
                 }
             );
-
         }
-
-        public DbSet<User> Users { get; set; }
-        public DbSet<Topic> Topics { get; set; }
-        public DbSet<Message> Messages { get; set; }
-
     }
 }

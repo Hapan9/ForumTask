@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Threading.Tasks;
-using BLL.Interfaces;
 using BLL.DTOs;
+using BLL.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace PL.Controllers
 {
@@ -13,7 +11,7 @@ namespace PL.Controllers
     [ApiController]
     public class TopicController : ControllerBase
     {
-        ITopicService _workWithTopic;
+        private readonly ITopicService _workWithTopic;
 
         public TopicController(ITopicService workWithTopic)
         {
@@ -29,25 +27,26 @@ namespace PL.Controllers
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
 
+        [Authorize]
         [HttpPost]
-        public async Task<IActionResult> CreateTopic([FromBody]TopicDTO topicDTO)
+        public async Task<IActionResult> CreateTopic([FromBody] TopicDto topicDto)
         {
             try
             {
-                await _workWithTopic.CreateNewTopic(topicDTO);
+                await _workWithTopic.CreateNewTopic(topicDto);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
 
@@ -58,9 +57,13 @@ namespace PL.Controllers
             {
                 return new JsonResult(await _workWithTopic.GetTopic(id));
             }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
 
@@ -73,47 +76,49 @@ namespace PL.Controllers
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
 
+        [Authorize(Roles = "Administrator, Moderator")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTopic([FromRoute] Guid id, [FromBody]TopicDTO topicDTO)
+        public async Task<IActionResult> UpdateTopic([FromRoute] Guid id, [FromBody] TopicDto topicDto)
         {
-            try 
-            { 
-                await _workWithTopic.UpdateTopic(id, topicDTO);
+            try
+            {
+                await _workWithTopic.UpdateTopic(id, topicDto);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
+                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
 
+        [Authorize(Roles = "Administrator, Moderator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTopic(Guid id)
         {
             try
-            { 
+            {
                 await _workWithTopic.DeleteTopic(id);
                 return Ok();
             }
             catch (ArgumentException ex)
             {
-                return NotFound();
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {
-                return Problem();
+                return Problem(ex.Message);
             }
         }
     }

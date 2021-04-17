@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace BLL.DTOs
 {
-    public class MessageDTO
+    public class MessageDto
     {
-        [Required]
-        public string Text { get; set; }
+        [Required] public string Text { get; set; }
 
-        [Required]
-        public Guid TopicId { get; set; }
+        [Required] public Guid TopicId { get; set; }
 
-        [Required]
-        public Guid UserId { get; set; }
+        [Required] public Guid UserId { get; set; }
     }
 }

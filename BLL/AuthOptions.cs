@@ -1,19 +1,18 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BLL
 {
     public class AuthOptions
     {
-        public const string ISSUER = "Client";
-        public const string AUDIENCE = "Client";
-        const string KEY = "epam forum project";
-        public const int LIFETIME = 5;
+        public const string Issuer = "Client";
+        public const string Audience = "Client";
+        private const string Key = "epam forum project";
+        public const int Lifetime = 5;
+
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
-            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(KEY));
+            return new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Key));
         }
     }
 }

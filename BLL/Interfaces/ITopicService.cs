@@ -1,15 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BLL.DTOs;
 using DAL.Models;
-using System.Collections.Generic;
 
 namespace BLL.Interfaces
 {
     public interface ITopicService
     {
-
-        Task CreateNewTopic(TopicDTO topicDTO);
+        Task CreateNewTopic(TopicDto topicDto);
 
         Task DeleteTopic(Guid id);
 
@@ -17,9 +16,8 @@ namespace BLL.Interfaces
 
         Task<Topic> GetTopic(Guid id);
 
-        Task UpdateTopic(Guid id, TopicDTO topicDTO);
+        Task UpdateTopic(Guid id, TopicDto topicDto);
 
         Task<IEnumerable<Message>> GetMessages(Guid id);
-
     }
 }

@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BLL.DTOs;
 using DAL.Models;
-using System.Collections.Generic;
 
 namespace BLL.Interfaces
 {
     public interface IMessageService
     {
-        Task CreateMessage(MessageDTO messageDTO);
+        Task CreateMessage(MessageDto messageDto);
         Task DeleteMessage(Guid messageId);
         Task<Message> GetMessage(Guid id);
         Task<IEnumerable<Message>> GetMessages();
-        Task UpdateMessage(Guid messageId, MessageDTO messageDTO);
+        Task UpdateMessage(Guid messageId, MessageDto messageDto);
     }
 }

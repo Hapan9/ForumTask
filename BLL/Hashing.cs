@@ -1,28 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
 namespace BLL
 {
-    class Hashing
+    internal class Hashing
     {
         public static Guid GetHashString(string text)
         {
-            byte[] bytes = Encoding.Unicode.GetBytes(text);
+            var bytes = Encoding.Unicode.GetBytes(text);
 
-            MD5CryptoServiceProvider CSP = new MD5CryptoServiceProvider();
+            var csp = new MD5CryptoServiceProvider();
 
-            byte[] byteHash = CSP.ComputeHash(bytes);
+            var byteHash = csp.ComputeHash(bytes);
 
-            string hash = string.Empty;
- 
-            foreach (byte b in byteHash)
-                hash += string.Format("{0:x2}", b);
+            var hash = string.Empty;
+
+            foreach (var b in byteHash)
+                hash += $"{b:x2}";
 
             return new Guid(hash);
         }
-
-
     }
 }

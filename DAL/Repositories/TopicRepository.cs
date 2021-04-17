@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using DAL.Interfaces;
-using DAL.Models;
 using System.Linq;
 using System.Threading.Tasks;
+using DAL.Interfaces;
+using DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
@@ -47,8 +46,6 @@ namespace DAL.Repositories
 
         public async Task Update(Topic item)
         {
-
-            
             _db.Topics.Remove(await _db.Topics.FirstAsync(t => t.Id == item.Id));
             await _db.Topics.AddAsync(item);
 
