@@ -195,7 +195,11 @@ C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.c
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.genruntimeconfig.cache
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\AutoMapper.dll
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\System.Web.Http.dll
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.Core.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\AutoMapper.dll

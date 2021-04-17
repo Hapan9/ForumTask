@@ -43,7 +43,7 @@ namespace DAL
                     Surname = "First",
                     Login = "Login1",
                     Password = Guid.NewGuid(),
-                    Role = Roles.Admin
+                    Role = Roles.Administrator
                 },
                 new User()
                 {

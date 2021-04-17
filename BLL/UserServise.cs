@@ -79,15 +79,15 @@ namespace BLL
             await _unitOfWork.Users.Delete(id);
         }
 
-        public async Task<bool> CheckUserForm(AutorizationDTO autorizationDTO)
+        public async Task<User> CheckUserForm(AutorizationDTO autorizationDTO)
         {
             if((await _unitOfWork.Users.GetAll()).Count(u => u.Login == autorizationDTO.Login) == 0)
                 throw new ArgumentException();
 
-            if ((await _unitOfWork.Users.GetAll()).First(u => u.Login == autorizationDTO.Login).Password != Hashing.GetHashString(autorizationDTO.Password))
-                return false;
+            if ((await _unitOfWork.Users.GetAll()).First(u => u.Login == autorizationDTO.Login).Password == Hashing.GetHashString(autorizationDTO.Password))
+                return (await _unitOfWork.Users.GetAll()).First(u => u.Login == autorizationDTO.Login);
             else 
-                return true;
+                return null;
         }
 
         public async Task<IEnumerable<Topic>> GetTopics(Guid id)

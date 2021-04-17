@@ -14,7 +14,8 @@ using DAL;
 using DAL.Interfaces;
 using DAL.Models;
 using DAL.Repositories;
-using AutoMapper;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 namespace PL
 {
@@ -47,6 +48,24 @@ namespace PL
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                    .AddJwtBearer(options =>
+                    {
+                        options.RequireHttpsMetadata = false;
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidateIssuer = true,
+                            ValidIssuer = AuthOptions.ISSUER,
+
+                            ValidateAudience = true,
+                            ValidAudience = AuthOptions.AUDIENCE,
+                            ValidateLifetime = true,
+
+                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
+                            ValidateIssuerSigningKey = true,
+                        };
+                    });
+
             services.AddSwaggerGen();
 
         }
@@ -60,7 +79,7 @@ namespace PL
 
             app.UseSwagger();
 
-            
+
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "ForumAPI");
@@ -70,6 +89,7 @@ namespace PL
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

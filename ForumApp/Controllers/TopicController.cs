@@ -81,7 +81,7 @@ namespace PL.Controllers
             }
         }
 
-        [HttpPatch("{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTopic([FromRoute] Guid id, [FromBody]TopicDTO topicDTO)
         {
             try 

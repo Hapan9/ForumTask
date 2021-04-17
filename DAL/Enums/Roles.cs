@@ -8,6 +8,6 @@ namespace DAL.Enums
     {
         User,
         Moderator,
-        Admin
+        Administrator
     }
 }

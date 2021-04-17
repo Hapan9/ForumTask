@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BLL.Interfaces;
 using BLL.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PL.Controllers
 {
@@ -84,6 +85,7 @@ namespace PL.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody]UserDTO userDTO)
         {
@@ -106,7 +108,8 @@ namespace PL.Controllers
 
         }
 
-        [HttpPatch("{id}")]
+        [Authorize(Roles = "Administrator, Moderator")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateUser([FromRoute] Guid id, [FromBody]UserDTO userDTO)
         {
             try 
@@ -128,6 +131,7 @@ namespace PL.Controllers
             }
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser([FromRoute] Guid id)
         {
