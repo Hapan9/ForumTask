@@ -23,7 +23,7 @@ namespace PL.Controllers
             _workWithUser = workWithUser;
         }
 
-        [HttpPost]
+        [HttpPost("Login")]
         public async Task<IActionResult> UserAuthorize([FromBody] AuthorizationDto authorizationDto)
         {
             try
