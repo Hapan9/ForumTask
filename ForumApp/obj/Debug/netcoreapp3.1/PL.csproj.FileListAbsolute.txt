@@ -128,7 +128,6 @@ C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\P
 C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.dll
 C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.pdb
 C:\Users\Hapan9\Source\Repos\Hapan9\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.genruntimeconfig.cache
-C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.csprojAssemblyReference.cache
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.AssemblyInfoInputs.cache
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.AssemblyInfo.cs
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.csproj.CoreCompileInputs.cache
@@ -196,10 +195,10 @@ C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.g
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Microsoft.OpenApi.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\AutoMapper.dll
-C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\System.Net.Http.Formatting.dll
-C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\System.Web.Http.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
-C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.Core.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\obj\Debug\netcoreapp3.1\PL.csproj.AssemblyReference.cache
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\AutoFixture.dll
+C:\Users\Hapan9\Documents\GitHub\ForumTask\ForumApp\bin\Debug\netcoreapp3.1\Fare.dll

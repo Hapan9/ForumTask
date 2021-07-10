@@ -4,8 +4,8 @@ namespace BLL.DTOs
 {
     public class AuthorizationDto
     {
-        [Required] public string Login { get; set; }
+        [Required] [MinLength(5)] public string Login { get; set; }
 
-        [Required] public string Password { get; set; }
+        [Required] [MinLength(5)] public string Password { get; set; }
     }
 }

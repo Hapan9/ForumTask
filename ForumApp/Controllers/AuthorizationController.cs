@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using BLL;
 using BLL.DTOs;
 using BLL.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using PL.Models;
 
 namespace PL.Controllers
@@ -30,27 +26,10 @@ namespace PL.Controllers
             {
                 var user = await _workWithUser.CheckUserForm(authorizationDto);
 
-                if (user == null) return NotFound("Wrong password");
+                if (user == null)
+                    return NotFound("Wrong password");
 
-                var now = DateTime.UtcNow;
-
-                var jwt = new JwtSecurityToken(
-                    AuthOptions.Issuer,
-                    AuthOptions.Audience,
-                    notBefore: now,
-                    claims: new List<Claim>
-                    {
-                        new Claim("id", user.Id.ToString()),
-                        new Claim(ClaimsIdentity.DefaultNameClaimType, user.Name),
-                        new Claim("surname", user.Surname),
-                        new Claim("login", user.Login),
-                        new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
-                    },
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.Lifetime)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(),
-                        SecurityAlgorithms.HmacSha256));
-
-                var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+                var encodedJwt = JwtGenerator.GenerateJwt(user);
 
                 var response = new
                 {
@@ -74,7 +53,7 @@ namespace PL.Controllers
         {
             try
             {
-                var user = new UserDto
+                var userDto = new UserDto
                 {
                     Name = registrationModel.Name,
                     Surname = registrationModel.Surname,
@@ -82,17 +61,13 @@ namespace PL.Controllers
                     Password = registrationModel.Password,
                     Role = 0
                 };
-                await _workWithUser.CreateUser(user);
+                await _workWithUser.CreateUser(userDto);
 
                 return Ok();
             }
             catch (ArgumentException ex)
             {
                 return NotFound(ex.Message);
-            }
-            catch (InvalidCastException ex)
-            {
-                return BadRequest(ex.Message);
             }
             catch (Exception ex)
             {

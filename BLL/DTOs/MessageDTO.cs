@@ -5,7 +5,7 @@ namespace BLL.DTOs
 {
     public class MessageDto
     {
-        [Required] public string Text { get; set; }
+        [Required] [MinLength(1)] public string Text { get; set; }
 
         [Required] public Guid TopicId { get; set; }
 

@@ -10,7 +10,7 @@ namespace BLL.Interfaces
     {
         Task<User> GetUser(Guid id);
 
-        Task<IEnumerable<User>> GetUsers();
+        Task<IEnumerable<UserDto>> GetUsers();
 
         Task CreateUser(UserDto userDto);
 
@@ -18,10 +18,10 @@ namespace BLL.Interfaces
 
         Task DeleteUser(Guid id);
 
-        Task<User> CheckUserForm(AuthorizationDto authorizationDto);
+        Task<UserDto> CheckUserForm(AuthorizationDto authorizationDto);
 
-        Task<IEnumerable<Topic>> GetTopics(Guid id);
+        Task<IEnumerable<TopicDto>> GetTopics(Guid id);
 
-        Task<IEnumerable<Message>> GetMessages(Guid id);
+        Task<IEnumerable<MessageDto>> GetMessages(Guid id);
     }
 }

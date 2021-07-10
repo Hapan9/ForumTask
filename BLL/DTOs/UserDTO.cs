@@ -5,13 +5,13 @@ namespace BLL.DTOs
 {
     public class UserDto
     {
-        [Required] public string Name { get; set; }
+        [Required] [MinLength(5)] public string Name { get; set; }
 
-        public string Surname { get; set; }
+        [MinLength(5)] public string Surname { get; set; }
 
-        [Required] public string Login { get; set; }
+        [Required] [MinLength(5)] public string Login { get; set; }
 
-        [Required] public string Password { get; set; }
+        [Required] [MinLength(5)] public string Password { get; set; }
 
         [Required] public Roles Role { get; set; }
     }

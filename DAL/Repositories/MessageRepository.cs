@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class MessageRepository : IRepository<Message>
+    public class MessageRepository : IMessageRepository
     {
         private readonly Db _db;
 
@@ -19,13 +19,11 @@ namespace DAL.Repositories
         public async Task Create(Message item)
         {
             await _db.Messages.AddAsync(item);
-            await _db.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
         {
             _db.Messages.Remove(await _db.Messages.FirstAsync(m => m.Id == id));
-            await _db.SaveChangesAsync();
         }
 
         public async Task<Message> Get(Guid id)
@@ -45,8 +43,6 @@ namespace DAL.Repositories
         {
             _db.Messages.Remove(await _db.Messages.FirstAsync(m => m.Id == item.Id));
             await _db.Messages.AddAsync(item);
-
-            await _db.SaveChangesAsync();
         }
     }
 }

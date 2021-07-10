@@ -5,7 +5,7 @@ namespace BLL.DTOs
 {
     public class TopicDto
     {
-        [Required] public string Name { get; set; }
+        [Required] [MinLength(1)] public string Name { get; set; }
 
         [Required] public Guid UserId { get; set; }
     }

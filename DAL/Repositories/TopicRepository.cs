@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class TopicRepository : IRepository<Topic>
+    public class TopicRepository : ITopicRepository
     {
         private readonly Db _db;
 
@@ -20,15 +20,12 @@ namespace DAL.Repositories
         public async Task Create(Topic item)
         {
             await _db.Topics.AddAsync(item);
-            await _db.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
         {
             _db.Messages.RemoveRange(_db.Messages.Where(m => m.TopicId == id));
             _db.Topics.Remove(await _db.Topics.FirstAsync(t => t.Id == id));
-
-            await _db.SaveChangesAsync();
         }
 
         public async Task<Topic> Get(Guid id)
@@ -48,8 +45,6 @@ namespace DAL.Repositories
         {
             _db.Topics.Remove(await _db.Topics.FirstAsync(t => t.Id == item.Id));
             await _db.Topics.AddAsync(item);
-
-            await _db.SaveChangesAsync();
         }
     }
 }

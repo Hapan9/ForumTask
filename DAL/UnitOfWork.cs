@@ -1,21 +1,29 @@
-﻿using DAL.Interfaces;
-using DAL.Models;
+﻿using System.Threading.Tasks;
+using DAL.Interfaces;
 
 namespace DAL
 {
     public class UnitOfWork : IUnitOfWork
     {
-        public UnitOfWork(IRepository<User> users, IRepository<Topic> topics, IRepository<Message> messages)
+        private readonly Db _db;
+
+        public UnitOfWork(IUserRepository users, ITopicRepository topics, IMessageRepository messages, Db db)
         {
             Users = users;
             Topics = topics;
             Messages = messages;
+            _db = db;
         }
 
-        public IRepository<User> Users { get; }
+        public IUserRepository Users { get; }
 
-        public IRepository<Topic> Topics { get; }
+        public ITopicRepository Topics { get; }
 
-        public IRepository<Message> Messages { get; }
+        public IMessageRepository Messages { get; }
+
+        public async Task Save()
+        {
+            await _db.SaveChangesAsync();
+        }
     }
 }

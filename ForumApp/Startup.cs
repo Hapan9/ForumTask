@@ -1,8 +1,8 @@
 using BLL;
 using BLL.Interfaces;
+using BLL.Services;
 using DAL;
 using DAL.Interfaces;
-using DAL.Models;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -18,19 +18,29 @@ namespace PL
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment currentEnvironment)
         {
             Configuration = configuration;
+            _currentEnvironment = currentEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        private readonly IWebHostEnvironment _currentEnvironment;
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
-            services.AddDbContext<Db>(o =>
-                o.UseSqlServer(@"Server=(localdb)\mssqllocaldb;Database=ForumDB;Trusted_Connection=True;"));
+            //if (_currentEnvironment.IsEnvironment("Testing"))
+            //{
+            //    services.AddDbContext<Db>(o =>
+            //        o.UseInMemoryDatabase)
+            //}
+            //else
+            //{
+                services.AddDbContext<Db>(o =>
+                    o.UseSqlServer(Configuration.GetConnectionString("ForumDB")));
+            //}
 
             services.AddTransient<IUserService, UserService>();
 
@@ -38,11 +48,11 @@ namespace PL
 
             services.AddTransient<IMessageService, MessageService>();
 
-            services.AddTransient<IRepository<Message>, MessageRepository>();
+            services.AddTransient<IMessageRepository, MessageRepository>();
 
-            services.AddTransient<IRepository<Topic>, TopicRepository>();
+            services.AddTransient<ITopicRepository, TopicRepository>();
 
-            services.AddTransient<IRepository<User>, UserRepository>();
+            services.AddTransient<IUserRepository, UserRepository>();
 
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
@@ -75,28 +85,28 @@ namespace PL
                         Description = "EPAM project"
                     });
                     // To Enable authorization using Swagger (JWT)  
-                    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                    swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                     {
                         Name = "Authorization",
                         Type = SecuritySchemeType.ApiKey,
                         Scheme = "Bearer",
                         BearerFormat = "JWT",
                         In = ParameterLocation.Header,
-                        Description = "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\"",
+                        Description =
+                            "JWT Authorization header using the Bearer scheme. \r\n\r\n Enter 'Bearer' [space] and then your token in the text input below.\r\n\r\nExample: \"Bearer 12345abcdef\""
                     });
                     swagger.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
                         {
-                              new OpenApiSecurityScheme
+                            new OpenApiSecurityScheme
+                            {
+                                Reference = new OpenApiReference
                                 {
-                                    Reference = new OpenApiReference
-                                    {
-                                        Type = ReferenceType.SecurityScheme,
-                                        Id = "Bearer"
-                                    }
-                                },
-                                new string[] {}
-
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] { }
                         }
                     });
                 });

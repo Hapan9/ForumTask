@@ -1,11 +1,13 @@
-﻿using DAL.Models;
+﻿using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
     public interface IUnitOfWork
     {
-        IRepository<Message> Messages { get; }
-        IRepository<Topic> Topics { get; }
-        IRepository<User> Users { get; }
+        IMessageRepository Messages { get; }
+        ITopicRepository Topics { get; }
+        IUserRepository Users { get; }
+
+        Task Save();
     }
 }

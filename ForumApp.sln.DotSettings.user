@@ -1,0 +1,10 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c03c3e8c_002Dab12_002D4e2e_002D8fe2_002D381f7d5b78cc/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;Project Location="C:\Users\Hapan9\Documents\GitHub\ForumTask\Tests" Presentation="&amp;lt;Tests&amp;gt;" /&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;xUnit::9304E5CF-5854-4571-A7D4-67BDEB5CF3C7::.NETCoreApp,Version=v3.1::Tests.UnitTests.ServiceTests.UserServiceTests&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;xUnit::9304E5CF-5854-4571-A7D4-67BDEB5CF3C7::.NETCoreApp,Version=v3.1::Tests.UnitTests.ControllerTests.UserControllerTests&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

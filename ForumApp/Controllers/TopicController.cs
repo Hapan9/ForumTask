@@ -37,7 +37,7 @@ namespace PL.Controllers
         {
             try
             {
-                await _workWithTopic.CreateNewTopic(topicDto);
+                await _workWithTopic.CreateTopic(topicDto);
                 return Ok();
             }
             catch (ArgumentException ex)

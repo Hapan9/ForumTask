@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BLL
 {
-    internal class Hashing
+    public class Hashing
     {
         public static Guid GetHashString(string text)
         {

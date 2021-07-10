@@ -1,5 +1,6 @@
 ﻿using System;
-using DAL.Enums;
+using System.Collections.Generic;
+using AutoFixture;
 using DAL.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -33,88 +34,63 @@ namespace DAL
                 .WithMany(u => u.Messages)
                 .OnDelete(DeleteBehavior.ClientCascade);
 
-            var u1 = Guid.NewGuid();
-            var u2 = Guid.NewGuid();
-            var u3 = Guid.NewGuid();
+            var rnd = new Random();
 
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = u1,
-                    Name = "User",
-                    Surname = "First",
-                    Login = "Login1",
-                    Password = Guid.NewGuid(),
-                    Role = Roles.Administrator
-                },
-                new User
-                {
-                    Id = u2,
-                    Name = "User",
-                    Surname = "Second",
-                    Login = "Login2",
-                    Password = Guid.NewGuid(),
-                    Role = Roles.Moderator
-                },
-                new User
-                {
-                    Id = u3,
-                    Name = "User",
-                    Surname = "Third",
-                    Login = "Login2",
-                    Password = Guid.NewGuid(),
-                    Role = Roles.User
-                }
-            );
+            var users = new List<User>();
 
-            var t1 = Guid.NewGuid();
-            var t2 = Guid.NewGuid();
+            var topics = new List<Topic>();
 
-            modelBuilder.Entity<Topic>().HasData(
-                new Topic
-                {
-                    Id = t1,
-                    Name = "First topic",
-                    UserId = u1
-                },
-                new Topic
-                {
-                    Id = t2,
-                    Name = "Second topic",
-                    UserId = u2
-                }
-            );
+            var messages = new List<Message>();
 
-            modelBuilder.Entity<Message>().HasData(
-                new Message
-                {
-                    Id = Guid.NewGuid(),
-                    Text = "Message 0-0",
-                    TopicId = t1,
-                    UserId = u1
-                },
-                new Message
-                {
-                    Id = Guid.NewGuid(),
-                    Text = "Message 0-1",
-                    TopicId = t1,
-                    UserId = u2
-                },
-                new Message
-                {
-                    Id = Guid.NewGuid(),
-                    Text = "Message 1-0",
-                    TopicId = t2,
-                    UserId = u1
-                },
-                new Message
-                {
-                    Id = Guid.NewGuid(),
-                    Text = "Message 1-1",
-                    TopicId = t2,
-                    UserId = u2
-                }
-            );
+            var fixture = new Fixture();
+
+            for (var i = 0; i < 5; i++)
+            {
+                var user = fixture.Build<User>()
+                    .Without(u => u.Topics)
+                    .Without(u => u.Messages)
+                    .Create();
+
+                users.Add(user);
+            }
+
+            for (var i = 0; i < 10; i++)
+            {
+                var user = users[rnd.Next(users.Count)];
+
+                var topic = fixture.Build<Topic>()
+                    .With(t => t.UserId, user.Id)
+                    .Without(t => t.User)
+                    .Without(t => t.Messages)
+                    .Create();
+
+                topics.Add(topic);
+            }
+
+            for (var i = 0; i < 40; i++)
+            {
+                var user = users[rnd.Next(users.Count)];
+
+                var topic = topics[rnd.Next(topics.Count)];
+
+                var message = fixture.Build<Message>()
+                    .With(m => m.UserId, user.Id)
+                    .With(m => m.TopicId, topic.Id)
+                    .Without(m => m.User)
+                    .Without(m => m.Topic)
+                    .Create();
+
+                messages.Add(message);
+            }
+
+            modelBuilder.Entity<User>()
+                .HasData(users);
+
+            modelBuilder.Entity<Topic>()
+                .HasData(topics);
+
+            modelBuilder.Entity<Message>()
+                .HasData(messages);
         }
     }
 }

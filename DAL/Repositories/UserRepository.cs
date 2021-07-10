@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL.Repositories
 {
-    public class UserRepository : IRepository<User>
+    public class UserRepository : IUserRepository
     {
         private readonly Db _db;
 
@@ -20,7 +20,6 @@ namespace DAL.Repositories
         public async Task Create(User item)
         {
             await _db.Users.AddAsync(item);
-            await _db.SaveChangesAsync();
         }
 
         public async Task Delete(Guid id)
@@ -31,8 +30,6 @@ namespace DAL.Repositories
                 _db.Messages.RemoveRange(_db.Messages.Where(m => m.TopicId == topic.Id));
 
             _db.Users.Remove(await _db.Users.FirstAsync(u => u.Id == id));
-
-            await _db.SaveChangesAsync();
         }
 
         public async Task<User> Get(Guid id)
@@ -52,8 +49,6 @@ namespace DAL.Repositories
         {
             _db.Remove(await _db.Users.FirstAsync(u => u.Id == item.Id));
             await _db.AddAsync(item);
-
-            await _db.SaveChangesAsync();
         }
     }
 }

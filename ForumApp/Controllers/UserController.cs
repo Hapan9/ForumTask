@@ -95,10 +95,6 @@ namespace PL.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (InvalidCastException ex)
-            {
-                return BadRequest(ex.Message);
-            }
             catch (Exception ex)
             {
                 return Problem(ex.Message);
@@ -117,10 +113,6 @@ namespace PL.Controllers
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
-            }
-            catch (InvalidCastException ex)
-            {
-                return Problem(ex.Message);
             }
             catch (Exception ex)
             {
