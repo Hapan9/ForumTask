@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace Tests
 {
+    /// <summary>
+    /// Settings with TestServer
+    /// </summary>
     internal class TestingSettings
     {
     }
